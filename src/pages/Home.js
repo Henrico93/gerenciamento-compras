@@ -1,27 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-
 const Home = () => {
+  
   return (
-    <div>
-      <h1> Sistema de gerenciamento de Compras</h1>
+    <div className="home-container">
+      <h1 className="title">Sistema de Gerenciamento de Compras</h1>
       <nav>
-        <ul>
-          <li>
-            <Link to="/produtos">Gerenciar Produtos</Link>
+        <ul className="nav-list">
+          <li className="nav-item">
+            <Link to="/produtos" className="nav-link">Gerenciar Produtos</Link>
           </li>
-          <li>
-            <Link to="/categorias">Gerenciar Categorias</Link>
+          <li className="nav-item">
+            <Link to="/categorias" className="nav-link">Gerenciar Categorias</Link>
           </li>
-          <li>
-            <Link to="/listas">Gerenciar Listas</Link>
+          <li className="nav-item">
+            <Link to="/listas" className="nav-link">Gerenciador Listas</Link>
           </li>
-          <li>
-            <Link to="/vendedores">Gerenciar Vendedores</Link>
+          <li className="nav-item">
+            <Link to="/vendedores" className="nav-link">Gerenciar Vendedores</Link>
           </li>
-          <li>
-            <Link to="/agendamentos">Agendamento de Entregas</Link>
+          <li className="nav-item">
+            <Link to="/agendamentos" className="nav-link">Agendamento de Entregas</Link>
           </li>
         </ul>
       </nav>

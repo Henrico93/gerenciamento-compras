@@ -26,7 +26,7 @@ const GerenciadorListas = () => {
       return acc;
     }, {});
     setEstoque(estoqueInicial);
-  }, [produtos]);
+  }, [estoque, produtos]);
 
   // Função para atualizar o estoque de um produto e salvar no localStorage
   const handleEstoqueChange = (produto, quantidade) => {
