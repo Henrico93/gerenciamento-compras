@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
-const users = [
-    { email: 'henricoarevalo@gmail.com', password: 'henrico15' },
-    { email: 'hugomalaguite@gmail.com', password: 'hugo07' },
-    { email: 'teste@teste.com', password: '1234' }
-];
-
-const Login = ({ onLoginSuccess }) => {
+const Login = ({ onLoginSuccess, onRegisterClick }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -16,18 +9,19 @@ const Login = ({ onLoginSuccess }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-
         if (!email || !password) {
             alert('Por favor, preencha todos os campos');
             return;
         }
 
+        // Obtenha os usuários do localStorage
+        const users = JSON.parse(localStorage.getItem('users')) || [];
         const user = users.find(user => user.email === email && user.password === password);
-        
+
         if (user) {
             alert('Login realizado com sucesso!');
-            onLoginSuccess(); 
-            navigate('/'); 
+            onLoginSuccess(); // Notifica o App que o login foi bem-sucedido
+            navigate('/'); // Redireciona para a página home
         } else {
             alert('Credenciais inválidas');
         }
@@ -57,6 +51,9 @@ const Login = ({ onLoginSuccess }) => {
                 </div>
                 <button type="submit">Entrar</button>
             </form>
+            <p>
+                Não tem uma conta? <button onClick={onRegisterClick}>Registre-se</button>
+            </p>
         </div>
     );
 };
