@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './styles.css'; // ajuste o caminho conforme a estrutura do seu projeto
+import '../styles.css'; 
 
-// Componente principal
 const GerenciadorVendedores = () => {
   const [vendedores, setVendedores] = useState(() => {
     const vendedoresSalvos = localStorage.getItem('vendedores');
@@ -13,11 +12,11 @@ const GerenciadorVendedores = () => {
     return produtosSalvos ? JSON.parse(produtosSalvos) : [];
   });
 
-  const [nomeVendedor, setNomeVendedor] = useState(''); // Nome do vendedor
-  const [emailVendedor, setEmailVendedor] = useState(''); // Email do vendedor
-  const [cpfVendedor, setCpfVendedor] = useState(''); // CPF do vendedor
-  const [produtosSelecionados, setProdutosSelecionados] = useState([]); // Produtos selecionados
-  const [indiceEdicao, setIndiceEdicao] = useState(null); // Índice do vendedor em edição
+  const [nomeVendedor, setNomeVendedor] = useState(''); 
+  const [emailVendedor, setEmailVendedor] = useState(''); 
+  const [cpfVendedor, setCpfVendedor] = useState(''); 
+  const [produtosSelecionados, setProdutosSelecionados] = useState([]);
+  const [indiceEdicao, setIndiceEdicao] = useState(null); 
 
   useEffect(() => {
     localStorage.setItem('vendedores', JSON.stringify(vendedores));
@@ -94,12 +93,12 @@ const GerenciadorVendedores = () => {
           <div key={index}>
             <input
               type="checkbox"
-              id={`produto-${index}`} // Corrigido aqui
-              value={produto.nome} // Supondo que produto tenha uma propriedade nome
+              id={`produto-${index}`} 
+              value={produto.nome} 
               checked={produtosSelecionados.includes(produto.nome)}
               onChange={() => handleProductChange(produto.nome)}
             />
-            <label htmlFor={`produto-${index}`}>{produto.nome}</label> {/* Corrigido aqui */}
+            <label htmlFor={`produto-${index}`}>{produto.nome}</label>
           </div>
         ))}
 
