@@ -19,7 +19,6 @@ const App = () => {
   ]);
 
   useEffect(() => {
-    // Lógica para persistir usuários no localStorage (se necessário)
   }, [users]);
 
   const handleRegister = (newUser) => {

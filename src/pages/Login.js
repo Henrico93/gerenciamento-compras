@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({ onLoginSuccess, onRegisterClick }) => {
+const Login = ({ onLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -14,17 +14,21 @@ const Login = ({ onLoginSuccess, onRegisterClick }) => {
             return;
         }
 
-        // Obtenha os usuários do localStorage
+        // Verifique os usuários armazenados no localStorage
         const users = JSON.parse(localStorage.getItem('users')) || [];
         const user = users.find(user => user.email === email && user.password === password);
 
         if (user) {
             alert('Login realizado com sucesso!');
-            onLoginSuccess(); // Notifica o App que o login foi bem-sucedido
-            navigate('/'); // Redireciona para a página home
+            onLoginSuccess();  // Notifica o App que o login foi bem-sucedido
+            navigate('/');  // Redireciona para a página Home
         } else {
             alert('Credenciais inválidas');
         }
+    };
+
+    const handleRegisterClick = () => {
+        navigate('/register');  // Redireciona para a página de registro
     };
 
     return (
@@ -52,7 +56,7 @@ const Login = ({ onLoginSuccess, onRegisterClick }) => {
                 <button type="submit">Entrar</button>
             </form>
             <p>
-                Não tem uma conta? <button onClick={onRegisterClick}>Registre-se</button>
+                Não tem uma conta? <button onClick={handleRegisterClick}>Registre-se</button>
             </p>
         </div>
     );
