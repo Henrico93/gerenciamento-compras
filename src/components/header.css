@@ -1,0 +1,39 @@
+#navegar {
+  background-color: #f8f9fa; 
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+#navegar nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+#navegar nav ul li {
+  margin-right: 20px;
+}
+
+#navegar nav ul li a {
+  text-decoration: none;
+  color: #007bff;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+#navegar nav ul li a:hover {
+  color: #0056b3;
+}
+
+#navegar button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#navegar button:hover {
+  background-color: #218838;
+}

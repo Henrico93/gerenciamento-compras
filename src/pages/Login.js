@@ -14,21 +14,20 @@ const Login = ({ onLoginSuccess }) => {
             return;
         }
 
-        // Verifique os usuários armazenados no localStorage
         const users = JSON.parse(localStorage.getItem('users')) || [];
         const user = users.find(user => user.email === email && user.password === password);
 
         if (user) {
             alert('Login realizado com sucesso!');
-            onLoginSuccess();  // Notifica o App que o login foi bem-sucedido
-            navigate('/');  // Redireciona para a página Home
+            onLoginSuccess();
+            navigate('/'); 
         } else {
             alert('Credenciais inválidas');
         }
     };
 
     const handleRegisterClick = () => {
-        navigate('/register');  // Redireciona para a página de registro
+        navigate('/register');  
     };
 
     return (

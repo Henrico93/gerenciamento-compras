@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import '../styles.css'; 
+import { Link, useNavigate } from 'react-router-dom';  
+import '../header.css';
+import '../styles.css';
+
 
 const GerenciadorVendedores = () => {
+  const navigate = useNavigate();  
   const [vendedores, setVendedores] = useState(() => {
     const vendedoresSalvos = localStorage.getItem('vendedores');
     return vendedoresSalvos ? JSON.parse(vendedoresSalvos) : [];
@@ -64,57 +68,71 @@ const GerenciadorVendedores = () => {
 
   return (
     <div>
-      <h1>Gerenciador de Vendedores</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={nomeVendedor}
-          onChange={(e) => setNomeVendedor(e.target.value)}
-          placeholder="Nome do vendedor"
-          required
-        />
-        <input
-          type="email"
-          value={emailVendedor}
-          onChange={(e) => setEmailVendedor(e.target.value)}
-          placeholder="Email do vendedor"
-          required
-        />
-        <input
-          type="text"
-          value={cpfVendedor}
-          onChange={(e) => setCpfVendedor(e.target.value)}
-          placeholder="CPF do vendedor"
-          required
-        />
+      <header id='navegar'>
+        <nav>
+          <ul>
+            <li><Link to="/produtos">Gerenciar Produtos</Link></li>
+            <li><Link to="/categorias">Gerenciar Categorias</Link></li>
+            <li><Link to="/listas">Gerenciar Listas</Link></li>
+            <li><Link to="/agendamentos">Agendamento de Entregas</Link></li>
+          </ul>
+        </nav>
+        <button onClick={() => navigate('/')}>Voltar para Home</button>
+      </header>
 
-        <h3>Selecione os produtos que o vendedor irá vender:</h3>
-        {produtos.map((produto, index) => (
-          <div key={index}>
-            <input
-              type="checkbox"
-              id={`produto-${index}`} 
-              value={produto.nome} 
-              checked={produtosSelecionados.includes(produto.nome)}
-              onChange={() => handleProductChange(produto.nome)}
-            />
-            <label htmlFor={`produto-${index}`}>{produto.nome}</label>
-          </div>
-        ))}
+      <div className="content">
+        <h1>Gerenciador de Vendedores</h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={nomeVendedor}
+            onChange={(e) => setNomeVendedor(e.target.value)}
+            placeholder="Nome do vendedor"
+            required
+          />
+          <input
+            type="email"
+            value={emailVendedor}
+            onChange={(e) => setEmailVendedor(e.target.value)}
+            placeholder="Email do vendedor"
+            required
+          />
+          <input
+            type="text"
+            value={cpfVendedor}
+            onChange={(e) => setCpfVendedor(e.target.value)}
+            placeholder="CPF do vendedor"
+            required
+          />
 
-        <button type="submit">{indiceEdicao !== null ? 'Atualizar' : 'Adicionar'}</button>
-      </form>
+          <h3>Selecione os produtos que o vendedor irá vender:</h3>
+          {produtos.map((produto, index) => (
+            <div key={index}>
+              <input
+                type="checkbox"
+                id={`produto-${index}`} 
+                value={produto.nome} 
+                checked={produtosSelecionados.includes(produto.nome)}
+                onChange={() => handleProductChange(produto.nome)}
+              />
+              <label htmlFor={`produto-${index}`}>{produto.nome}</label>
+            </div>
+          ))}
 
-      <h2>Lista de Vendedores</h2>
-      <ul>
-        {vendedores.map((vendedor, index) => (
-          <li key={index}>
-            {vendedor.nome} - Email: {vendedor.email} - CPF: {vendedor.cpf} - Produtos: {vendedor.produtos.join(', ')}
-            <button onClick={() => handleEdit(index)}>Editar</button>
-            <button onClick={() => handleDelete(index)}>Deletar</button>
-          </li>
-        ))}
-      </ul>
+          <button type="submit">{indiceEdicao !== null ? 'Atualizar' : 'Adicionar'}</button>
+        </form>
+
+        <h2>Lista de Vendedores</h2>
+        <ul>
+          {vendedores.map((vendedor, index) => (
+            <li key={index}>
+              {vendedor.nome} - Email: {vendedor.email} - CPF: {vendedor.cpf} - Produtos: {vendedor.produtos.join(', ')}
+              <button onClick={() => handleEdit(index)}>Editar</button>
+              <button onClick={() => handleDelete(index)}>Deletar</button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

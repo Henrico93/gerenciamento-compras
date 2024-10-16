@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import '../header.css';
 
-// Componente principal
 const GerenciadorProdutos = ({ vendedorSelecionado }) => {
-  // Estado para produtos
+  const navigate = useNavigate();
   const [produtos, setProdutos] = useState(() => {
     const produtosSalvos = localStorage.getItem('produtos');
     return produtosSalvos ? JSON.parse(produtosSalvos) : [];
   });
 
-  // Estado para categorias
   const [categorias, setCategorias] = useState(() => {
     const categoriasSalvas = localStorage.getItem('categorias');
     return categoriasSalvas ? JSON.parse(categoriasSalvas) : [];
   });
 
-  const [nomeProduto, setNomeProduto] = useState(''); // Nome do produto
-  const [descricaoProduto, setDescricaoProduto] = useState(''); // Descrição do produto
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState(''); // Categoria selecionada
-  const [indiceEdicao, setIndiceEdicao] = useState(null); // Índice do produto em edição
+  const [nomeProduto, setNomeProduto] = useState(''); 
+  const [descricaoProduto, setDescricaoProduto] = useState(''); 
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState(''); 
+  const [indiceEdicao, setIndiceEdicao] = useState(null); 
 
   useEffect(() => {
     localStorage.setItem('produtos', JSON.stringify(produtos));
@@ -27,10 +27,10 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
     localStorage.setItem('categorias', JSON.stringify(categorias));
   }, [categorias]);
 
-  // Função para adicionar ou editar um produto
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (nomeProduto.trim() === '' || !categoriaSelecionada || descricaoProduto.trim() === '') return; // Verifica se o produto não está vazio, se uma categoria está selecionada e se a descrição não está vazia
+    if (nomeProduto.trim() === '' || !categoriaSelecionada || descricaoProduto.trim() === '') return; 
 
     if (indiceEdicao !== null) {
       const produtosAtualizados = produtos.map((produto, index) =>
@@ -41,20 +41,20 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
     } else {
       setProdutos([...produtos, { nome: nomeProduto, categoria: categoriaSelecionada, descricao: descricaoProduto, vendedor: vendedorSelecionado }]);
     }
-    setNomeProduto(''); // Limpar o campo de entrada
-    setDescricaoProduto(''); // Limpar o campo de descrição
-    setCategoriaSelecionada(''); // Limpar a categoria selecionada
+    setNomeProduto(''); 
+    setDescricaoProduto(''); 
+    setCategoriaSelecionada(''); 
   };
 
-  // Função para iniciar a edição de um produto
+  
   const handleEdit = (index) => {
     setIndiceEdicao(index);
     setNomeProduto(produtos[index].nome);
-    setDescricaoProduto(produtos[index].descricao); // Carregar a descrição do produto
+    setDescricaoProduto(produtos[index].descricao); 
     setCategoriaSelecionada(produtos[index].categoria);
   };
 
-  // Função para deletar um produto
+  
   const handleDelete = (index) => {
     const produtosAtualizados = produtos.filter((_, i) => i !== index);
     setProdutos(produtosAtualizados);
@@ -62,6 +62,18 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
 
   return (
     <div>
+      <header id='navegar'>
+        <nav>
+          <ul>
+            <li><Link to="/categorias">Gerenciar Categorias</Link></li>
+            <li><Link to="/listas">Gerenciar Listas</Link></li>
+            <li><Link to="/vendedores">Gerenciar vendedores</Link></li>
+            <li><Link to="/agendamentos">Agendamento de Entregas</Link></li>
+          </ul>
+        </nav>
+        <button onClick={() => navigate('/')}>Voltar para Home</button>
+      </header>
+
       <h1>Gerenciador de Produtos</h1>
       <form onSubmit={handleSubmit}>
         <input

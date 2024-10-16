@@ -20,9 +20,8 @@ const Register = ({ onRegisterSuccess }) => {
             return;
         }
 
-        // Verifique se o localStorage já possui usuários
         const users = JSON.parse(localStorage.getItem('users')) || [];
-        console.log('Usuários existentes:', users); // Debug
+        console.log('Usuários existentes:', users); 
 
         const userExists = users.find(user => user.email === email);
 
@@ -36,8 +35,8 @@ const Register = ({ onRegisterSuccess }) => {
         localStorage.setItem('users', JSON.stringify(users));
 
         alert('Cadastro realizado com sucesso!');
-        onRegisterSuccess(); // Notifica o App que o registro foi bem-sucedido
-        navigate('/login'); // Redireciona para a página de login
+        onRegisterSuccess(); 
+        navigate('/login'); 
     };
 
     return (

@@ -1,44 +1,40 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const GerenciadorListas = () => {
-  // Carrega os produtos do localStorage
+  const navigate = useNavigate();
   const [produtos, setProdutos] = useState(() => {
     const produtosSalvos = localStorage.getItem('produtos');
     return produtosSalvos ? JSON.parse(produtosSalvos) : [];
   });
 
-  // Carrega as categorias do localStorage
   const [categorias, setCategorias] = useState(() => {
     const categoriasSalvas = localStorage.getItem('categorias');
     return categoriasSalvas ? JSON.parse(categoriasSalvas) : [];
   });
 
-  // Carrega o estoque do localStorage, ou inicia com valores vazios
   const [estoque, setEstoque] = useState(() => {
     const estoqueSalvo = localStorage.getItem('estoque');
     return estoqueSalvo ? JSON.parse(estoqueSalvo) : {};
   });
 
-  // Atualiza o estoque ao alterar os produtos
   useEffect(() => {
     const estoqueInicial = produtos.reduce((acc, produto) => {
-      acc[produto.nome] = estoque[produto.nome] || 0; // Mantém o estoque salvo ou inicia com 0
+      acc[produto.nome] = estoque[produto.nome] || 0; 
       return acc;
     }, {});
     setEstoque(estoqueInicial);
   }, [estoque, produtos]);
 
-  // Função para atualizar o estoque de um produto e salvar no localStorage
   const handleEstoqueChange = (produto, quantidade) => {
     const novoEstoque = {
       ...estoque,
       [produto]: quantidade,
     };
     setEstoque(novoEstoque);
-    localStorage.setItem('estoque', JSON.stringify(novoEstoque)); // Salva no localStorage
+    localStorage.setItem('estoque', JSON.stringify(novoEstoque));
   };
 
-  // Função para ordenar produtos por categoria e nome
   const produtosOrdenados = [...produtos].sort((a, b) => {
     if (a.categoria < b.categoria) return -1;
     if (a.categoria > b.categoria) return 1;
@@ -47,6 +43,17 @@ const GerenciadorListas = () => {
 
   return (
     <div>
+      <header id='navegar'>
+        <nav>
+          <ul>
+            <li><Link to="/produtos">Gerenciar Produtos</Link></li>
+            <li><Link to="/categorias">Gerenciar Categorias</Link></li>
+            <li><Link to="/vendedores">Gerenciar Vendedores</Link></li>
+            <li><Link to="/agendamentos">Agendamento de Entregas</Link></li>
+          </ul>
+        </nav>
+        <button onClick={() => navigate('/')}>Voltar para Home</button>
+      </header>
       <h1>Gerenciamento de Estoque de Produtos</h1>
 
       <h2>Lista de Produtos</h2>

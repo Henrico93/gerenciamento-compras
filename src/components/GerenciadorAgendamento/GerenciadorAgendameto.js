@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import '../header.css';
 
 const GerenciadorAgendamentos = () => {
-  // Carrega os agendamentos do localStorage
+  const navigate = useNavigate();
   const [agendamentos, setAgendamentos] = useState(() => {
     const agendamentosSalvos = localStorage.getItem('agendamentos');
     return agendamentosSalvos ? JSON.parse(agendamentosSalvos) : [];
@@ -26,16 +28,13 @@ const GerenciadorAgendamentos = () => {
   const [quantidadeSelecionada, setQuantidadeSelecionada] = useState(1);
   const [indiceEdicao, setIndiceEdicao] = useState(null);
 
-  // Produtos agora são associados a vendedores
   const produtosVendedorSelecionado = vendedores.find(v => v.nome === vendedorSelecionado)?.produtos || [];
 
-  // Função para validar se há estoque suficiente
   const quantidadeDisponivel = estoque[produtoSelecionado] || 0;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Verifica se a quantidade solicitada é maior que o estoque disponível
     if (quantidadeSelecionada > quantidadeDisponivel) {
       alert(`Quantidade solicitada (${quantidadeSelecionada}) excede o estoque disponível (${quantidadeDisponivel}).`);
       return;
@@ -55,19 +54,18 @@ const GerenciadorAgendamentos = () => {
       );
       setAgendamentos(agendamentosAtualizados);
       setIndiceEdicao(null);
-      localStorage.setItem('agendamentos', JSON.stringify(agendamentosAtualizados)); // Atualiza no localStorage
+      localStorage.setItem('agendamentos', JSON.stringify(agendamentosAtualizados)); 
     } else {
       const novosAgendamentos = [...agendamentos, novoAgendamento];
       setAgendamentos(novosAgendamentos);
-      localStorage.setItem('agendamentos', JSON.stringify(novosAgendamentos)); // Salva no localStorage
+      localStorage.setItem('agendamentos', JSON.stringify(novosAgendamentos)); 
 
-      // Atualiza o estoque, diminuindo a quantidade selecionada
       const novoEstoque = {
         ...estoque,
         [produtoSelecionado]: quantidadeDisponivel - quantidadeSelecionada,
       };
       setEstoque(novoEstoque);
-      localStorage.setItem('estoque', JSON.stringify(novoEstoque)); // Atualiza o localStorage com o estoque atualizado
+      localStorage.setItem('estoque', JSON.stringify(novoEstoque)); 
     }
 
     setDescricaoAgendamento('');
@@ -90,11 +88,22 @@ const GerenciadorAgendamentos = () => {
   const handleDelete = (index) => {
     const agendamentosAtualizados = agendamentos.filter((_, i) => i !== index);
     setAgendamentos(agendamentosAtualizados);
-    localStorage.setItem('agendamentos', JSON.stringify(agendamentosAtualizados)); // Atualiza no localStorage
+    localStorage.setItem('agendamentos', JSON.stringify(agendamentosAtualizados));
   };
 
   return (
     <div>
+      <header id='navegar'>
+        <nav>
+          <ul>
+            <li><Link to='/produtos'>Gerenciar Produtos</Link></li>
+            <li><Link to="/categorias">Gerenciar Categorias</Link></li>
+            <li><Link to="/listas">Gerenciar Listas</Link></li>
+            <li><Link to='/vendedores'>Gerenciar Vendedores</Link></li>
+          </ul>
+        </nav>
+        <button onClick={() => navigate('/')}>Voltar para Home</button>
+      </header>
       <h1>Gerenciador de Agendamentos</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -111,13 +120,12 @@ const GerenciadorAgendamentos = () => {
           required
         />
         
-        {/* Seleção do Vendedor */}
         <select
           value={vendedorSelecionado}
           onChange={(e) => {
             setVendedorSelecionado(e.target.value);
-            setProdutoSelecionado(''); // Reseta o produto selecionado ao trocar o vendedor
-            setQuantidadeSelecionada(1); // Reseta a quantidade
+            setProdutoSelecionado(''); 
+            setQuantidadeSelecionada(1); 
           }}
           required
         >
@@ -129,12 +137,11 @@ const GerenciadorAgendamentos = () => {
           ))}
         </select>
         
-        {/* Seleção do Produto Filtrado */}
         <select
           value={produtoSelecionado}
           onChange={(e) => setProdutoSelecionado(e.target.value)}
           required
-          disabled={!vendedorSelecionado} // Desabilita o select se nenhum vendedor for selecionado
+          disabled={!vendedorSelecionado} 
         >
           <option value="">Selecione um produto</option>
           {produtosVendedorSelecionado.map((produto, index) => (
@@ -144,7 +151,6 @@ const GerenciadorAgendamentos = () => {
           ))}
         </select>
 
-        {/* Seleção da Quantidade */}
         {produtoSelecionado && (
           <div>
             <label>Quantidade disponível: {quantidadeDisponivel}</label>

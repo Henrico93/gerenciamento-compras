@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const GerenciadorCategorias = () => {
+  const navigate = useNavigate();
   const [categorias, setCategorias] = useState(() => {
-    // Carrega as categorias do local storage ao iniciar o componente
     const categoriasSalvas = localStorage.getItem('categorias');
     return categoriasSalvas ? JSON.parse(categoriasSalvas) : [];
   });
   const [nomeCategoria, setNomeCategoria] = useState('');
   const [indiceEdicao, setIndiceEdicao] = useState(null);
 
-  // Salva as categorias no local storage sempre que elas mudarem
+
   useEffect(() => {
     localStorage.setItem('categorias', JSON.stringify(categorias));
   }, [categorias]);
@@ -40,6 +41,17 @@ const GerenciadorCategorias = () => {
 
   return (
     <div>
+      <header id='navegar'>
+        <nav>
+          <ul>
+            <li><Link to='/produtos'>Gerenciar Produtos</Link></li>
+            <li><Link to="/listas">Gerenciar Listas</Link></li>
+            <li><Link to='/vendedores'>Gerenciar Vendedores</Link></li>
+            <li><Link to="/agendamentos">Agendamento de Entregas</Link></li>
+          </ul>
+        </nav>
+        <button onClick={() => navigate('/')}>Voltar para Home</button>
+      </header>
       <h1>Gerenciador de Categorias</h1>
       <form onSubmit={handleSubmit}>
         <input
