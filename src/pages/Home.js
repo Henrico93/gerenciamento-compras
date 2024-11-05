@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
-  
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100); // Atraso de 100ms para a animação de entrada
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="home-container">
+    <div className={`home-container ${isVisible ? 'visible' : ''}`}>
       <h1 className="title">Sistema de Gerenciamento de Compras</h1>
       <nav>
         <ul className="nav-list">
