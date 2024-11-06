@@ -87,12 +87,9 @@ const GerenciadorVendedores = () => {
               <li><Link to="/agendamentos" style={{ color: '#007bff', textDecoration: 'none' }}>Agendamento de Entregas</Link></li>
             </ul>
           </nav>
-          <button onClick={() => navigate('/')} style={{
-            backgroundColor: '#dc3545', color: '#fff', border: 'none', padding: '8px 12px', cursor: 'pointer', borderRadius: '5px',
-            marginTop: '15px'
-          }}>
-            Voltar para Home
-          </button>
+          <button onClick={() => navigate('/')} className="botaohome">
+  Voltar para Home
+</button>
         </header>
 
         <div className="content">

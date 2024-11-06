@@ -1,8 +1,6 @@
 
-
-
-.a{
-  background-color: rgb(95, 95, 106);
+.planofundo{
+  background-color: rgb(110, 110, 139);
 }
 
 h1, h2, h3 {
@@ -17,6 +15,7 @@ form {
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  text-decoration: none;
   
 }
 
@@ -189,49 +188,6 @@ margin: 10px 0;
 
 }
 
-.login-container {
-  width: 300px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
-
-.login-container h2 {
-  text-align: center;
-}
-
-.login-container div {
-  margin-bottom: 15px;
-}
-
-.login-container label {
-  display: block;
-  font-weight: bold;
-}
-
-.login-container input {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-}
-
-.login-container button {
-  width: 100%;
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.login-container button:hover {
-  background-color: #45a049;
-}
-
-
 .btn-wine {
   background-color: #c82333; /* Cor vinho (dark red) */
   color: white; /* Texto em branco */
@@ -355,4 +311,437 @@ li:active {
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.botaohome {
+  background-color: #453637;
+  color: #6eb5bd;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 15px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect */
+.botaohome:hover {
+  background-color: #1b1011; /* Slightly darker red */
+  transform: translateY(-2px); /* Adds a subtle lift */
+}
+
+/* Focus effect for accessibility */
+.botaohome:focus {
+  outline: 2px solid #007bff; /* Blue outline to indicate focus */
+}
+
+/* Active effect for click feedback */
+.botaohome:active {
+  background-color: #a71d2a; /* Darker red when clicked */
+  transform: translateY(0); /* Reset transform */
+}
+
+/* Container de login */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgb(110, 110, 139);
+}
+
+/* Cartão do login */
+.cartao {
+  background-color: #d8e1e3; /* Fundo branco */
+  padding: 30px;
+  max-width: 380px;
+  width: 100%;
+  border-radius: 15px; /* Bordas arredondadas */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombras suaves */
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Efeito de hover no cartão */
+.cartao:hover {
+  transform: scale(1.02); /* Pequeno aumento ao passar o mouse */
+}
+
+/* Título */
+.titulo-login {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Campos do formulário */
+.campo-formulario {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+/* Efeito de foco nos campos */
+.campo-formulario:focus {
+  border-color: #007bff; /* Borda azul quando estiver focado */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Sombra azul suave */
+}
+
+/* Botão de login */
+.botao-login {
+  background-color: #007bff; /* Azul vibrante */
+  color: white;
+  padding: 12px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+/* Efeito de hover no botão de login */
+.botao-login:hover {
+  background-color: #0056b3; /* Azul escuro */
+}
+
+/* Estilos gerais */
+/* Estilos gerais */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Estilo da tela de registro */
+.register-container {
+  background-color: rgb(110, 110, 139); /* Cor de fundo consistente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.cartao-register {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Títulos */
+.titulo-register {
+  font-size: 24px;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Formulário */
+.grupo-formulario-register {
+  margin-bottom: 20px;
+}
+
+.rotulo-formulario-register {
+  font-size: 16px;
+  color: #555;
+}
+
+.campo-formulario-register {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.campo-formulario-register:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Botões */
+.botao-register {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.botao-register:hover {
+  background-color: #0056b3;
+}
+
+/* Link de navegação */
+.texto-login-register {
+  font-size: 16px;
+  color: #555;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.botao-login-link {
+  color: #ffffff;
+  text-decoration: none;
+  
+}
+
+.botao-login-link:hover {
+  color: #ebf5ff;
+  text-decoration: none;
+}
+
+/* Contêiner geral */
+.categoria-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #f7f9fc;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Navbar */
+.navbar-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-list {
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar-link {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.navbar-link:hover {
+  color: #0056b3;
+}
+
+
+
+/* Contêiner geral */
+.categoria-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #f4f6f9; /* Fundo ainda suave, mas mais contrastante */
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil para dar mais profundidade */
+}
+
+/* Navbar */
+.navbar-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-list {
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar-link {
+  color: #1e3a8a; /* Azul vibrante para contraste */
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.navbar-link:hover {
+  color: #0c3c5c; /* Azul mais profundo no hover */
+}
+
+.botao-home {
+  background-color: #1976d2; /* Azul mais forte para dar destaque */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.botao-home:hover {
+  background-color: #1565c0; /* Tom mais escuro de azul no hover */
+}
+
+/* Títulos */
+.titulo-categorias {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50; /* Cor mais forte para o título */
+  margin-bottom: 25px;
+}
+
+.titulo-lista {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 25px;
+}
+
+/* Formulário */
+.form-categoria {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Sombra mais destacada */
+  margin-bottom: 30px;
+}
+
+.input-categoria {
+  font-size: 1rem;
+  padding: 14px;
+  border-radius: 5px;
+  border: 1px solid #1976d2; /* Bordas azuis para contraste */
+  width: 100%;
+  margin-bottom: 15px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-categoria:focus {
+  border-color: #1565c0; /* Cor mais forte ao focar */
+  box-shadow: 0 0 5px rgba(25, 118, 210, 0.5); /* Adicionando sombra no foco */
+  outline: none;
+}
+
+.btn-submit {
+  background-color: #1e88e5; /* Azul vibrante */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+  background-color: #1565c0; /* Cor mais escura no hover */
+}
+
+/* Lista de Categorias */
+.categorias-list {
+  padding: 0;
+  margin: 0;
+}
+
+.categoria-item {
+  font-size: 1.1rem;
+  padding: 18px;
+  border: 1px solid #b0bec5;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Sombras mais destacadas */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.categoria-item:hover {
+  background-color: #f1f1f1; /* Cor mais leve no hover */
+  transform: scale(1.03);
+}
+
+.btn-editar {
+  background-color: #2196f3; /* Azul mais forte para edição */
+  color: white;
+  border: none;
+  padding: 6px 15px;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-editar:hover {
+  background-color: #1976d2; /* Efeito de hover mais forte */
+}
+
+.btn-deletar {
+  background-color: #e53935; /* Vermelho mais vibrante para exclusão */
+  color: white;
+  border: none;
+  padding: 6px 15px;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-deletar:hover {
+  background-color: #c62828; /* Tom mais intenso de vermelho no hover */
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .categoria-container {
+    padding: 15px;
+  }
+
+  .navbar-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar-link {
+    font-size: 1rem;
+    margin: 12px 0;
+  }
+
+  .input-categoria,
+  .btn-submit {
+    font-size: 0.95rem;
+  }
+
+  .btn-editar,
+  .btn-deletar {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
 }

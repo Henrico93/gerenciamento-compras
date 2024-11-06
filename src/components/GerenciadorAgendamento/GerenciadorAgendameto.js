@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../header.css';
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import '../styles.css';
 const GerenciadorAgendamentos = () => {
   const navigate = useNavigate();
   const [agendamentos, setAgendamentos] = useState(() => {
@@ -104,12 +104,9 @@ const GerenciadorAgendamentos = () => {
           <li><Link to="/agendamentos" style={{ color: '#007bff', textDecoration: 'none' }}>Agendamento de Entregas</Link></li>
         </ul>
       </nav>
-      <button onClick={() => navigate('/')} style={{
-        backgroundColor: '#dc3545', color: '#fff', border: 'none', padding: '8px 12px', cursor: 'pointer', borderRadius: '5px',
-        marginTop: '15px'
-      }}>
-        Voltar para Home
-      </button>
+      <button onClick={() => navigate('/')} className="botaohome">
+  Voltar para Home
+</button>
     </header>
     
     

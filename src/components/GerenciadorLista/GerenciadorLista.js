@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import '../styles.css';
 const GerenciadorListas = () => {
   const navigate = useNavigate();
   const [produtos, setProdutos] = useState(() => {
@@ -53,12 +53,9 @@ const GerenciadorListas = () => {
           <li><Link to="/agendamentos" style={{ color: '#007bff', textDecoration: 'none' }}>Agendamento de Entregas</Link></li>
         </ul>
       </nav>
-      <button onClick={() => navigate('/')} style={{
-        backgroundColor: '#dc3545', color: '#fff', border: 'none', padding: '8px 12px', cursor: 'pointer', borderRadius: '5px',
-        marginTop: '15px'
-      }}>
-        Voltar para Home
-      </button>
+      <button onClick={() => navigate('/')} className="botaohome">
+  Voltar para Home
+</button>
     </header>
 
     <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '30px' }}>Gerenciamento de Estoque de Produtos</h1>
