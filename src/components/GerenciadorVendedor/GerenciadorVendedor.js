@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';  
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import '../header.css';
-import '../styles.css';
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const GerenciadorVendedores = () => {
-  const navigate = useNavigate();  
-  const location = useLocation(); // Pega a localização atual
+  const navigate = useNavigate();
+  const location = useLocation();
   const [vendedores, setVendedores] = useState(() => {
     const vendedoresSalvos = localStorage.getItem('vendedores');
     return vendedoresSalvos ? JSON.parse(vendedoresSalvos) : [];
@@ -19,11 +19,12 @@ const GerenciadorVendedores = () => {
     return produtosSalvos ? JSON.parse(produtosSalvos) : [];
   });
 
-  const [nomeVendedor, setNomeVendedor] = useState(''); 
-  const [emailVendedor, setEmailVendedor] = useState(''); 
-  const [cpfVendedor, setCpfVendedor] = useState(''); 
+  const [nomeVendedor, setNomeVendedor] = useState('');
+  const [emailVendedor, setEmailVendedor] = useState('');
+  const [cpfVendedor, setCpfVendedor] = useState('');
   const [produtosSelecionados, setProdutosSelecionados] = useState([]);
-  const [indiceEdicao, setIndiceEdicao] = useState(null); 
+  const [indiceEdicao, setIndiceEdicao] = useState(null);
+  const [filtroProduto, setFiltroProduto] = useState('');
 
   useEffect(() => {
     localStorage.setItem('vendedores', JSON.stringify(vendedores));
@@ -69,94 +70,76 @@ const GerenciadorVendedores = () => {
     }
   };
 
+  const produtosFiltrados = produtos.filter(produto =>
+    produto.nome.toLowerCase().includes(filtroProduto.toLowerCase())
+  );
+
   return (
-    <CSSTransition
-      in={true} // Sempre que o componente é renderizado
-      timeout={300}
-      classNames="fade"
-      key={location.key} // Adiciona uma chave única para forçar a animação
-      unmountOnExit
-    >
-      <div className="container mt-4">
-        <header style={{ marginBottom: '20px', textAlign: 'center' }}>
-          <nav>
-            <ul style={{ display: 'flex', justifyContent: 'space-around', padding: '0', listStyle: 'none' }}>
-              <li><Link to="/produtos" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Produtos</Link></li>
-              <li><Link to="/categorias" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Categorias</Link></li>
-              <li><Link to="/vendedores" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Vendedores</Link></li>
-              <li><Link to="/agendamentos" style={{ color: '#007bff', textDecoration: 'none' }}>Agendamento de Entregas</Link></li>
+    <CSSTransition in={true} timeout={300} classNames="fade" key={location.key} unmountOnExit>
+      <div className="gerenciador-vendedores-container">
+        <header className="gerenciador-vendedores-header">
+          <nav className="navbar-custom">
+            <ul>
+              <li><Link to="/produtos">Gerenciar Produtos</Link></li>
+              <li><Link to="/categorias">Gerenciar Categorias</Link></li>
+              <li><Link to="/vendedores">Gerenciar Vendedores</Link></li>
+              <li><Link to="/agendamentos">Agendamento de Entregas</Link></li>
+              <button onClick={() => navigate('/')} className="gerenciador-vendedores-button">Voltar para Home</button>
             </ul>
           </nav>
-          <button onClick={() => navigate('/')} className="botaohome">
-  Voltar para Home
-</button>
+         
         </header>
 
-        <div className="content">
-          <h1 className="text-center">Gerenciador de Vendedores</h1>
-          <form onSubmit={handleSubmit} className="mb-4">
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                value={nomeVendedor}
-                onChange={(e) => setNomeVendedor(e.target.value)}
-                placeholder="Nome do vendedor"
-                required
-              />
-            </div>
-            <div className="form-group">
-              <input
-                type="email"
-                className="form-control"
-                value={emailVendedor}
-                onChange={(e) => setEmailVendedor(e.target.value)}
-                placeholder="Email do vendedor"
-                required
-              />
-            </div>
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                value={cpfVendedor}
-                onChange={(e) => setCpfVendedor(e.target.value)}
-                placeholder="CPF do vendedor"
-                required
-              />
-            </div>
+        <h1 className="text-center">Gerenciador de Vendedores</h1>
 
-            <h3>Selecione os produtos que o vendedor irá vender:</h3>
-            {produtos.map((produto, index) => (
-              <div key={index} className="form-check">
+        <form onSubmit={handleSubmit} className="gerenciador-vendedores-form">
+          <input type="text" value={nomeVendedor} onChange={(e) => setNomeVendedor(e.target.value)} placeholder="Nome do vendedor" required />
+          <input type="email" value={emailVendedor} onChange={(e) => setEmailVendedor(e.target.value)} placeholder="Email do vendedor" required />
+          <input type="text" value={cpfVendedor} onChange={(e) => setCpfVendedor(e.target.value)} placeholder="CPF do vendedor" required />
+          <input
+            className="filtro-produtos"
+            type="text"
+            value={filtroProduto}
+            onChange={(e) => setFiltroProduto(e.target.value)}
+            placeholder="Filtrar produtos"
+          />
+          <div className="lista-produtos">
+            {produtosFiltrados.map((produto, index) => (
+              <div key={produto.id} className="produto-item">
                 <input
                   type="checkbox"
-                  className="form-check-input"
-                  id={`produto-${index}`} 
-                  value={produto.nome} 
-                  checked={produtosSelecionados.includes(produto.nome)}
-                  onChange={() => handleProductChange(produto.nome)}
+                  checked={produtosSelecionados.includes(produto)}
+                  onChange={() => handleProductChange(produto)}
                 />
-                <label className="form-check-label" htmlFor={`produto-${index}`}>{produto.nome}</label>
+                <span>{produto.nome}</span>
               </div>
             ))}
+          </div>
+          <button type="submit" className="gerenciador-vendedores-button">
+            {indiceEdicao !== null ? 'Editar Vendedor' : 'Adicionar Vendedor'}
+          </button>
+        </form>
 
-            <button className="btn btn-primary" type="submit">{indiceEdicao !== null ? 'Atualizar' : 'Adicionar'}</button>
-          </form>
-
-          <h2>Lista de Vendedores</h2>
-          <ul className="list-group">
-            {vendedores.map((vendedor, index) => (
-              <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                {vendedor.nome} - Email: {vendedor.email} - CPF: {vendedor.cpf} - Produtos: {vendedor.produtos.join(', ')}
-                <div>
-                  <button className="btn btn-warning btn-sm me-2" onClick={() => handleEdit(index)}>Editar</button>
-                  <button className="btn btn-danger btn-sm" onClick={() => handleDelete(index)}>Deletar</button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul className="vendedores-lista">
+          {vendedores.map((vendedor, index) => (
+            <li key={index} className="vendedores-item">
+              <div>
+                <h3>{vendedor.nome}</h3>
+                <p>{vendedor.email}</p>
+                <p>{vendedor.cpf}</p>
+                <ul>
+                  {vendedor.produtos.map((produto, idx) => (
+                    <li key={idx}>{produto.nome}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <button onClick={() => handleEdit(index)} className="button-edit">Editar</button>
+                <button onClick={() => handleDelete(index)} className="button-delete">Deletar</button>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </CSSTransition>
   );

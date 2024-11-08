@@ -43,20 +43,18 @@ const GerenciadorListas = () => {
   });
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', maxWidth: '800px', margin: '0 auto' }}>
-    <header style={{ marginBottom: '20px', textAlign: 'center' }}>
-      <nav>
-        <ul style={{ display: 'flex', justifyContent: 'space-around', padding: '0', listStyle: 'none' }}>
-          <li><Link to="/produtos" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Produtos</Link></li>
-          <li><Link to="/categorias" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Categorias</Link></li>
-          <li><Link to="/vendedores" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Vendedores</Link></li>
-          <li><Link to="/agendamentos" style={{ color: '#007bff', textDecoration: 'none' }}>Agendamento de Entregas</Link></li>
-        </ul>
-      </nav>
-      <button onClick={() => navigate('/')} className="botaohome">
-  Voltar para Home
-</button>
-    </header>
+    <div >
+    <header className="navbar-gerenciador">
+  <nav>
+    <ul className="navbar-list">
+      <li><Link to="/produtos" className="navbar-link">Gerenciar Produtos</Link></li>
+      <li><Link to="/categorias" className="navbar-link">Gerenciar Categorias</Link></li>
+      <li><Link to="/vendedores" className="navbar-link">Gerenciar Vendedores</Link></li>
+      <li><Link to="/agendamentos" className="navbar-link">Agendamento de Entregas</Link></li>
+    </ul>
+  </nav>
+  <button onClick={() => navigate('/')} className="botao-home">Voltar para Home</button>
+</header>
 
     <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '30px' }}>Gerenciamento de Estoque de Produtos</h1>
 

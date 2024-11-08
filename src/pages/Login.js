@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 const Login = ({ onLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -18,7 +19,6 @@ const Login = ({ onLoginSuccess }) => {
         const user = users.find(user => user.email === email && user.password === password);
 
         if (user) {
-           
             onLoginSuccess();
             navigate('/'); 
         } else {
@@ -31,8 +31,8 @@ const Login = ({ onLoginSuccess }) => {
     };
 
     return (
-        <div className="login-container d-flex justify-content-center align-items-center vh-100">
-            <div className="cartao sombra p-4 largura-max">
+        <div className="login-container">
+            <div className="cartao">
                 <h2 className="titulo-login text-center mb-4">Login</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="grupo-formulario mb-3">
@@ -57,11 +57,11 @@ const Login = ({ onLoginSuccess }) => {
                             required
                         />
                     </div>
-                    <button type="submit" className="botao-login btn btn-primario largura-total">Entrar</button>
+                    <button type="submit" className="botao-login">Entrar</button>
                 </form>
                 <p className="texto-registro text-center mt-3">
                     Não tem uma conta?{" "}
-                    <button onClick={handleRegisterClick} className="botao-registro-link btn btn-link p-0">
+                    <button onClick={handleRegisterClick} className="botao-registro-link">
                         Registre-se
                     </button>
                 </p>

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../header.css';
 import "bootstrap/dist/css/bootstrap.min.css";
-import '../styles.css';
+
+
 const GerenciadorAgendamentos = () => {
   const navigate = useNavigate();
   const [agendamentos, setAgendamentos] = useState(() => {
@@ -30,7 +31,6 @@ const GerenciadorAgendamentos = () => {
   const [indiceEdicao, setIndiceEdicao] = useState(null);
 
   const produtosVendedorSelecionado = vendedores.find(v => v.nome === vendedorSelecionado)?.produtos || [];
-
   const quantidadeDisponivel = estoque[produtoSelecionado] || 0;
 
   const handleSubmit = (e) => {
@@ -93,124 +93,119 @@ const GerenciadorAgendamentos = () => {
   };
 
   return (
-    <div className="container my-4">
-    {/* Navbar */}
-    <header style={{ marginBottom: '20px', textAlign: 'center' }}>
-      <nav>
-        <ul style={{ display: 'flex', justifyContent: 'space-around', padding: '0', listStyle: 'none' }}>
-          <li><Link to="/produtos" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Produtos</Link></li>
-          <li><Link to="/categorias" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Categorias</Link></li>
-          <li><Link to="/vendedores" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Vendedores</Link></li>
-          <li><Link to="/agendamentos" style={{ color: '#007bff', textDecoration: 'none' }}>Agendamento de Entregas</Link></li>
-        </ul>
-      </nav>
-      <button onClick={() => navigate('/')} className="botaohome">
-  Voltar para Home
-</button>
-    </header>
-    
-    
-    
-    {/* Título */}
-    <h1 className="text-center mb-4">Gerenciador de Agendamentos</h1>
+    <div>
+      <header className="navbar-gerenciador">
+        <nav>
+          <ul className="navbar-list">
+            <li><Link to="/produtos" className="navbar-link">Gerenciar Produtos</Link></li>
+            <li><Link to="/categorias" className="navbar-link">Gerenciar Categorias</Link></li>
+            <li><Link to="/vendedores" className="navbar-link">Gerenciar Vendedores</Link></li>
+            <li><Link to="/agendamentos" className="navbar-link">Agendamento de Entregas</Link></li>
+          </ul>
+        </nav>
+        <button className="botao-home" onClick={() => navigate('/')}>Voltar para Home</button>
+      </header>
 
-    {/* Formulário de Agendamento */}
-    <form onSubmit={handleSubmit} className="card p-4 shadow-sm mb-4">
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          value={descricaoAgendamento}
-          onChange={(e) => setDescricaoAgendamento(e.target.value)}
-          placeholder="Descrição do agendamento"
-          required
-        />
-      </div>
-      <div className="mb-3">
-        <input
-          type="date"
-          className="form-control"
-          value={dataAgendamento}
-          onChange={(e) => setDataAgendamento(e.target.value)}
-          required
-        />
-      </div>
-      
-      <div className="mb-3">
-        <select
-          className="form-select"
-          value={vendedorSelecionado}
-          onChange={(e) => {
-            setVendedorSelecionado(e.target.value);
-            setProdutoSelecionado('');
-            setQuantidadeSelecionada(1);
-          }}
-          required
-        >
-          <option value="">Selecione um vendedor</option>
-          {vendedores.map((vendedor, index) => (
-            <option key={index} value={vendedor.nome}>
-              {vendedor.nome}
-            </option>
-          ))}
-        </select>
-      </div>
-      
-      <div className="mb-3">
-        <select
-          className="form-select"
-          value={produtoSelecionado}
-          onChange={(e) => setProdutoSelecionado(e.target.value)}
-          required
-          disabled={!vendedorSelecionado}
-        >
-          <option value="">Selecione um produto</option>
-          {produtosVendedorSelecionado.map((produto, index) => (
-            <option key={index} value={produto}>
-              {produto}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div className="container mt-4">
+        <div className="card">
+          <div className="card-body">
+            <h2 className="text-center mb-4">Agendamento de Entregas</h2>
 
-      {produtoSelecionado && (
-        <div className="mb-3">
-          <label className="form-label">Quantidade disponível: {quantidadeDisponivel}</label>
-          <input
-            type="number"
-            className="form-control"
-            value={quantidadeSelecionada}
-            onChange={(e) => setQuantidadeSelecionada(parseInt(e.target.value))}
-            min="1"
-            max={quantidadeDisponivel}
-            required
-          />
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="descricaoAgendamento" className="form-label">Descrição</label>
+                <input
+                  type="text"
+                  id="descricaoAgendamento"
+                  className="form-control"
+                  value={descricaoAgendamento}
+                  onChange={(e) => setDescricaoAgendamento(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="dataAgendamento" className="form-label">Data do Agendamento</label>
+                <input
+                  type="date"
+                  id="dataAgendamento"
+                  className="form-control"
+                  value={dataAgendamento}
+                  onChange={(e) => setDataAgendamento(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="vendedorSelecionado" className="form-label">Vendedor</label>
+                <select
+                  id="vendedorSelecionado"
+                  className="form-select"
+                  value={vendedorSelecionado}
+                  onChange={(e) => setVendedorSelecionado(e.target.value)}
+                  required
+                >
+                  <option value="">Selecione um vendedor</option>
+                  {vendedores.map((vendedor) => (
+                    <option key={vendedor.id} value={vendedor.nome}>{vendedor.nome}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="produtoSelecionado" className="form-label">Produto</label>
+                <select
+                  id="produtoSelecionado"
+                  className="form-select"
+                  value={produtoSelecionado}
+                  onChange={(e) => setProdutoSelecionado(e.target.value)}
+                  required
+                >
+                  <option value="">Selecione um produto</option>
+                  {produtosVendedorSelecionado.map((produto) => (
+                    <option key={produto} value={produto}>{produto}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="quantidadeSelecionada" className="form-label">Quantidade</label>
+                <input
+                  type="number"
+                  id="quantidadeSelecionada"
+                  className="form-control"
+                  value={quantidadeSelecionada}
+                  onChange={(e) => setQuantidadeSelecionada(Number(e.target.value))}
+                  min="1"
+                  max={quantidadeDisponivel}
+                  required
+                />
+              </div>
+
+              <button type="submit" className="btn btn-success mt-4">{indiceEdicao !== null ? 'Atualizar Agendamento' : 'Adicionar Agendamento'}</button>
+            </form>
+          </div>
         </div>
-      )}
+      </div>
 
-      <button type="submit" className="btn btn-success w-100">
-        {indiceEdicao !== null ? 'Atualizar' : 'Adicionar'}
-      </button>
-    </form>
-
-    {/* Lista de Agendamentos */}
-    <h2 className="text-center mb-3">Lista de Agendamentos</h2>
-    <ul className="list-group">
-      {agendamentos.map((agendamento, index) => (
-        <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <strong>{agendamento.descricao}</strong> - {new Date(agendamento.data).toLocaleDateString()}<br />
-            Vendedor: {agendamento.vendedor} - Produto: {agendamento.produto} - Quantidade: {agendamento.quantidade}
-          </div>
-          <div>
-            <button className="btn btn-primary btn-sm me-2" onClick={() => handleEdit(index)}>Editar</button>
-            <button className="btn btn-danger btn-sm" onClick={() => handleDelete(index)}>Deletar</button>
-          </div>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
-}
+      <div className="container mt-4">
+        <h2>Agendamentos Cadastrados</h2>
+        <div className="list-group">
+          {agendamentos.map((agendamento, index) => (
+            <div key={index} className="list-group-item">
+              <strong>{agendamento.descricao}</strong><br />
+              {agendamento.data}<br />
+              {agendamento.vendedor}<br />
+              {agendamento.produto}<br />
+              Quantidade: {agendamento.quantidade}<br />
+              <button className="btn btn-primary btn-sm" onClick={() => handleEdit(index)}>Editar</button>
+              <button className="btn btn-danger btn-sm" onClick={() => handleDelete(index)}>Deletar</button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default GerenciadorAgendamentos;

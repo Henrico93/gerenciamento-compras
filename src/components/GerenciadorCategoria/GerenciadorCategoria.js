@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import '../styles.css';
+
 const GerenciadorCategorias = () => {
   const navigate = useNavigate();
   const [categorias, setCategorias] = useState(() => {
@@ -10,7 +11,6 @@ const GerenciadorCategorias = () => {
   });
   const [nomeCategoria, setNomeCategoria] = useState('');
   const [indiceEdicao, setIndiceEdicao] = useState(null);
-
 
   useEffect(() => {
     localStorage.setItem('categorias', JSON.stringify(categorias));
@@ -41,10 +41,10 @@ const GerenciadorCategorias = () => {
   };
 
   return (
-    <div className="container categoria-container my-4">
+    <div className="gerenciador-categorias-container">
       {/* Navbar */}
-      <header className="navbar-header">
-        <nav className="navbar">
+      <header className="navbar-gerenciador">
+        <nav>
           <ul className="navbar-list">
             <li><Link to="/produtos" className="navbar-link">Gerenciar Produtos</Link></li>
             <li><Link to="/categorias" className="navbar-link">Gerenciar Categorias</Link></li>
@@ -56,10 +56,10 @@ const GerenciadorCategorias = () => {
       </header>
 
       {/* Título */}
-      <h1 className="titulo-categorias text-center mb-4">Gerenciador de Categorias</h1>
+      <h1 className="titulo-gerenciador text-center mb-4">Gerenciador de Categorias</h1>
 
       {/* Formulário de Categoria */}
-      <form onSubmit={handleSubmit} className="form-categoria card p-4 shadow-sm mb-4">
+      <form onSubmit={handleSubmit} className="form-categoria card p-3 shadow-sm mb-4 mx-auto">
         <div className="mb-3">
           <input
             type="text"
@@ -70,20 +70,20 @@ const GerenciadorCategorias = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-success btn-submit w-100">
+        <button type="submit" className="btn-submit w-100">
           {indiceEdicao !== null ? 'Atualizar' : 'Adicionar'}
         </button>
       </form>
 
       {/* Lista de Categorias */}
       <h2 className="titulo-lista text-center mb-3">Lista de Categorias</h2>
-      <ul className="list-group categorias-list">
+      <ul className="list-group categorias-list mx-auto">
         {categorias.map((categoria, index) => (
           <li key={index} className="list-group-item categoria-item d-flex justify-content-between align-items-center">
             <span>{categoria}</span>
             <div>
-              <button className="btn btn-primary btn-sm me-2 btn-editar" onClick={() => handleEdit(index)}>Editar</button>
-              <button className="btn btn-danger btn-sm btn-deletar" onClick={() => handleDelete(index)}>Deletar</button>
+              <button className="btn-editar" onClick={() => handleEdit(index)}>Editar</button>
+              <button className="btn-deletar" onClick={() => handleDelete(index)}>Deletar</button>
             </div>
           </li>
         ))}

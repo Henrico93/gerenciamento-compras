@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+
 const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -14,23 +15,25 @@ const Home = () => {
 
   return (
     <div className={`home-container ${isVisible ? 'visible' : ''}`}>
-      <h1 className="title">Sistema de Gerenciamento de Compras</h1>
+      <div className="home-title-container">
+        <h1 className="home-title">Sistema de Gerenciamento de Compras</h1>
+      </div>
       <nav>
-        <ul className="nav-list">
-          <li className="nav-item">
-            <Link to="/produtos" className="nav-link">Gerenciar Produtos</Link>
+        <ul className="home-nav-list">
+          <li className="home-nav-item">
+            <Link to="/produtos" className="home-nav-link">Gerenciar Produtos</Link>
           </li>
-          <li className="nav-item">
-            <Link to="/categorias" className="nav-link">Gerenciar Categorias</Link>
+          <li className="home-nav-item">
+            <Link to="/categorias" className="home-nav-link">Gerenciar Categorias</Link>
           </li>
-          <li className="nav-item">
-            <Link to="/listas" className="nav-link">Gerenciador Listas</Link>
+          <li className="home-nav-item">
+            <Link to="/listas" className="home-nav-link">Gerenciador Listas</Link>
           </li>
-          <li className="nav-item">
-            <Link to="/vendedores" className="nav-link">Gerenciar Vendedores</Link>
+          <li className="home-nav-item">
+            <Link to="/vendedores" className="home-nav-link">Gerenciar Vendedores</Link>
           </li>
-          <li className="nav-item">
-            <Link to="/agendamentos" className="nav-link">Agendamento de Entregas</Link>
+          <li className="home-nav-item">
+            <Link to="/agendamentos" className="home-nav-link">Agendamento de Entregas</Link>
           </li>
         </ul>
       </nav>

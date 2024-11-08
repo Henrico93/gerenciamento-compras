@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../header.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import '../styles.css';
+
 const GerenciadorProdutos = ({ vendedorSelecionado }) => {
   const navigate = useNavigate();
   const [produtos, setProdutos] = useState(() => {
@@ -15,10 +16,11 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
     return categoriasSalvas ? JSON.parse(categoriasSalvas) : [];
   });
 
-  const [nomeProduto, setNomeProduto] = useState(''); 
-  const [descricaoProduto, setDescricaoProduto] = useState(''); 
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState(''); 
-  const [indiceEdicao, setIndiceEdicao] = useState(null); 
+  const [nomeProduto, setNomeProduto] = useState('');
+  const [descricaoProduto, setDescricaoProduto] = useState('');
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
+  const [indiceEdicao, setIndiceEdicao] = useState(null);
+  const [filtro, setFiltro] = useState('');  // Novo estado para o filtro
 
   useEffect(() => {
     localStorage.setItem('produtos', JSON.stringify(produtos));
@@ -28,10 +30,9 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
     localStorage.setItem('categorias', JSON.stringify(categorias));
   }, [categorias]);
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (nomeProduto.trim() === '' || !categoriaSelecionada || descricaoProduto.trim() === '') return; 
+    if (nomeProduto.trim() === '' || !categoriaSelecionada || descricaoProduto.trim() === '') return;
 
     if (indiceEdicao !== null) {
       const produtosAtualizados = produtos.map((produto, index) =>
@@ -42,44 +43,43 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
     } else {
       setProdutos([...produtos, { nome: nomeProduto, categoria: categoriaSelecionada, descricao: descricaoProduto, vendedor: vendedorSelecionado }]);
     }
-    setNomeProduto(''); 
-    setDescricaoProduto(''); 
-    setCategoriaSelecionada(''); 
+    setNomeProduto('');
+    setDescricaoProduto('');
+    setCategoriaSelecionada('');
   };
 
-  
   const handleEdit = (index) => {
     setIndiceEdicao(index);
     setNomeProduto(produtos[index].nome);
-    setDescricaoProduto(produtos[index].descricao); 
+    setDescricaoProduto(produtos[index].descricao);
     setCategoriaSelecionada(produtos[index].categoria);
   };
 
-  
   const handleDelete = (index) => {
     const produtosAtualizados = produtos.filter((_, i) => i !== index);
     setProdutos(produtosAtualizados);
   };
 
+  // Função para filtrar produtos
+  const produtosFiltrados = produtos.filter(produto => produto.nome.toLowerCase().includes(filtro.toLowerCase()));
+
   return (
-    <div className="container mt-4">
-     <header style={{ marginBottom: '20px', textAlign: 'center' }}>
-      <nav>
-        <ul style={{ display: 'flex', justifyContent: 'space-around', padding: '0', listStyle: 'none' }}>
-          <li><Link to="/produtos" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Produtos</Link></li>
-          <li><Link to="/categorias" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Categorias</Link></li>
-          <li><Link to="/vendedores" style={{ color: '#007bff', textDecoration: 'none' }}>Gerenciar Vendedores</Link></li>
-          <li><Link to="/agendamentos" style={{ color: '#007bff', textDecoration: 'none' }}>Agendamento de Entregas</Link></li>
-        </ul>
-      </nav>
-      <button onClick={() => navigate('/')} className="botaohome">
-  Voltar para Home
-</button>
-    </header>
+    <div className="gerenciador-produtos-container">
+      <header className="navbar-gerenciador">
+        <nav>
+          <ul className="navbar-list">
+            <li><Link to="/produtos" className="navbar-link">Gerenciar Produtos</Link></li>
+            <li><Link to="/categorias" className="navbar-link">Gerenciar Categorias</Link></li>
+            <li><Link to="/vendedores" className="navbar-link">Gerenciar Vendedores</Link></li>
+            <li><Link to="/agendamentos" className="navbar-link">Agendamento de Entregas</Link></li>
+          </ul>
+        </nav>
+        <button onClick={() => navigate('/')} className="botao-home">Voltar para Home</button>
+      </header>
 
       <h1 className="text-center">Gerenciador de Produtos</h1>
 
-      <form onSubmit={handleSubmit} className="mb-4">
+      <form onSubmit={handleSubmit} className="gerenciador-produtos-form">
         <div className="form-group">
           <input
             type="text"
@@ -108,33 +108,43 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
           >
             <option value="">Selecione uma categoria</option>
             {categorias.map((categoria, index) => (
-              <option key={index} value={categoria}>
-                {categoria}
-              </option>
+              <option key={index} value={categoria}>{categoria}</option>
             ))}
           </select>
         </div>
-        <button className="btn btn-primary" type="submit">{indiceEdicao !== null ? 'Atualizar' : 'Adicionar'}</button>
+        <button type="submit" className="gerenciadorprodutosbotao">
+          {indiceEdicao !== null ? 'Atualizar Produto' : 'Adicionar Produto'}
+        </button>
       </form>
 
-      <h2>Lista de Produtos</h2>
-      <ul className="list-group">
-        {produtos.filter(produto => produto.vendedor === vendedorSelecionado).map((produto, index) => (
-          <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+      <div className="filtro-container">
+        <input
+          type="text"
+          className="form-control filtro-input"
+          placeholder="Filtrar por nome do produto"
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
+        />
+      </div>
+
+      <div className="list-group-produtos">
+        {produtosFiltrados.map((produto, index) => (
+          <div key={index} className="list-group-produtos-item">
             <div>
-              <strong>{produto.nome}</strong> - {produto.categoria} 
-              <p style={{ wordWrap: 'break-word', maxWidth: '400px' }}>{produto.descricao}</p>
+              <h5>{produto.nome}</h5>
+              <p>{produto.descricao}</p>
+              <p><strong>Categoria:</strong> {produto.categoria}</p>
+              <p><strong>Vendedor:</strong> {produto.vendedor}</p>
             </div>
             <div>
-              <button className="btn btn-warning btn-sm me-2" onClick={() => handleEdit(index)}>Editar</button>
-              <button className="btn btn-danger btn-sm" onClick={() => handleDelete(index)}>Deletar</button>
+              <button onClick={() => handleEdit(index)} className="btn btn-warning">Editar</button>
+              <button onClick={() => handleDelete(index)} className="btn btn-danger">Deletar</button>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
-}
-
+};
 
 export default GerenciadorProdutos;
