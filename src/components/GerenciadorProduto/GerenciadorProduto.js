@@ -72,6 +72,7 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
             <li><Link to="/categorias" className="navbar-link">Gerenciar Categorias</Link></li>
             <li><Link to="/vendedores" className="navbar-link">Gerenciar Vendedores</Link></li>
             <li><Link to="/agendamentos" className="navbar-link">Agendamento de Entregas</Link></li>
+            <li><Link to="/listas" className="navbar-link">Gerenciador da Lista</Link></li>
           </ul>
         </nav>
         <button onClick={() => navigate('/')} className="botao-home">Voltar para Home</button>

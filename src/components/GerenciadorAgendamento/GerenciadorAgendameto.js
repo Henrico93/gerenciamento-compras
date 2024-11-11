@@ -15,6 +15,11 @@ const GerenciadorAgendamentos = () => {
     return vendedoresSalvos ? JSON.parse(vendedoresSalvos) : [];
   });
 
+  const [estoque, setEstoque] = useState(() => {
+    const estoqueSalvo = localStorage.getItem('estoque');
+    return estoqueSalvo ? JSON.parse(estoqueSalvo) : {};
+  });
+
   const [produtos, setProdutos] = useState([]);
   const [dataEntrega, setDataEntrega] = useState('');
   const [cliente, setCliente] = useState('');
@@ -22,8 +27,6 @@ const GerenciadorAgendamentos = () => {
   const [produtoSelecionado, setProdutoSelecionado] = useState('');
   const [observacoes, setObservacoes] = useState('');
   const [indiceEdicao, setIndiceEdicao] = useState(null);
-  const [filtroAgendamento, setFiltroAgendamento] = useState('');
-  const [estoqueProdutoSelecionado, setEstoqueProdutoSelecionado] = useState(0);
   const [quantidadeDesejada, setQuantidadeDesejada] = useState(0);
 
   // Atualiza o estado de agendamentos no localStorage
@@ -31,36 +34,21 @@ const GerenciadorAgendamentos = () => {
     localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
   }, [agendamentos]);
 
-  // Filtra os produtos quando o vendedor é selecionado
   useEffect(() => {
     if (vendedorSelecionado) {
       const vendedor = vendedores.find(v => v.nome === vendedorSelecionado);
       if (vendedor) {
         setProdutos(vendedor.produtos);
-        setProdutoSelecionado('');  // Reseta o produto selecionado quando o vendedor muda
-        setEstoqueProdutoSelecionado(0);  // Reseta o estoque
+        setProdutoSelecionado('');
       }
     }
   }, [vendedorSelecionado, vendedores]);
-
-  // Atualiza o estoque do produto selecionado
-  useEffect(() => {
-    if (produtoSelecionado && vendedorSelecionado) {
-      const vendedor = vendedores.find(v => v.nome === vendedorSelecionado);
-      const produto = vendedor?.produtos.find(p => p.nome === produtoSelecionado);
-
-      // Somente atualiza o estoque se houver alteração no estoque
-      if (produto && produto.estoque !== estoqueProdutoSelecionado) {
-        setEstoqueProdutoSelecionado(produto.estoque);
-      }
-    }
-  }, [produtoSelecionado, vendedorSelecionado, vendedores, estoqueProdutoSelecionado]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!dataEntrega || cliente.trim() === '' || produtoSelecionado === '' || vendedorSelecionado === '' || quantidadeDesejada <= 0) return;
 
-    if (quantidadeDesejada > estoqueProdutoSelecionado) {
+    if (quantidadeDesejada > estoque[produtoSelecionado]) {
       alert('A quantidade desejada excede o estoque disponível!');
       return;
     }
@@ -77,29 +65,16 @@ const GerenciadorAgendamentos = () => {
       setAgendamentos([...agendamentos, novoAgendamento]);
     }
 
-    // Atualiza o estoque do produto selecionado, subtraindo apenas a quantidade desejada
-    const vendedorAtualizado = vendedores.map(vendedor => {
-      if (vendedor.nome === vendedorSelecionado) {
-        vendedor.produtos = vendedor.produtos.map(produto => {
-          if (produto.nome === produtoSelecionado) {
-            produto.estoque -= quantidadeDesejada;  // Subtrai a quantidade desejada do estoque
-          }
-          return produto;
-        });
-      }
-      return vendedor;
-    });
+    const novoEstoque = { ...estoque, [produtoSelecionado]: estoque[produtoSelecionado] - quantidadeDesejada };
+    setEstoque(novoEstoque);
+    localStorage.setItem('estoque', JSON.stringify(novoEstoque));
 
-    setVendedores(vendedorAtualizado);
-    localStorage.setItem('vendedores', JSON.stringify(vendedorAtualizado));
-
-    // Resetar campos
     setDataEntrega('');
     setCliente('');
     setVendedorSelecionado('');
     setProdutoSelecionado('');
     setObservacoes('');
-    setQuantidadeDesejada(0);
+    setQuantidadeDesejada('');
   };
 
   const handleEdit = (index) => {
@@ -109,18 +84,20 @@ const GerenciadorAgendamentos = () => {
     setVendedorSelecionado(agendamento.vendedor);
     setProdutoSelecionado(agendamento.produto);
     setObservacoes(agendamento.observacoes);
-    setQuantidadeDesejada(agendamento.quantidade);  // Preenche a quantidade desejada ao editar
+    setQuantidadeDesejada(agendamento.quantidade);
     setIndiceEdicao(index);
   };
 
   const handleDelete = (index) => {
-    const agendamentosAtualizados = agendamentos.filter((_, i) => i !== index);
-    setAgendamentos(agendamentosAtualizados);
-  };
+    const agendamento = agendamentos[index];
+    const produtoAtualizado = agendamento.produto;
+    const estoqueAtualizado = { ...estoque, [produtoAtualizado]: estoque[produtoAtualizado] + agendamento.quantidade };
 
-  const agendamentosFiltrados = agendamentos.filter(agendamento =>
-    agendamento.produto.toLowerCase().includes(filtroAgendamento.toLowerCase())
-  );
+    const novosAgendamentos = agendamentos.filter((_, i) => i !== index);
+    setAgendamentos(novosAgendamentos);
+    setEstoque(estoqueAtualizado);
+    localStorage.setItem('estoque', JSON.stringify(estoqueAtualizado));
+  };
 
   return (
     <div className="gerenciador-categorias-container">
@@ -185,13 +162,14 @@ const GerenciadorAgendamentos = () => {
             ))}
           </select>
         </div>
-        <div className="form-group">
-          {estoqueProdutoSelecionado > 0 ? (
-            <p>Estoque disponível: {estoqueProdutoSelecionado}</p>
-          ) : (
-            <p>Produto sem estoque disponível</p>
-          )}
-        </div>
+
+        {/* Quantidade de estoque disponível */}
+        {produtoSelecionado && (
+          <div className="form-group">
+            <p>Quantidade em estoque: {estoque[produtoSelecionado] || 0}</p>
+          </div>
+        )}
+
         <div className="form-group">
           <input
             type="number"
@@ -199,11 +177,12 @@ const GerenciadorAgendamentos = () => {
             value={quantidadeDesejada}
             onChange={(e) => setQuantidadeDesejada(Number(e.target.value))}
             min="1"
-            max={estoqueProdutoSelecionado}
+            max={estoque[produtoSelecionado]}
             placeholder="Quantidade desejada"
             required
           />
         </div>
+        
         <div className="form-group">
           <textarea
             className="form-control"
@@ -217,28 +196,17 @@ const GerenciadorAgendamentos = () => {
         </button>
       </form>
 
-      <div className="filter-container">
-        <input
-          type="text"
-          placeholder="Filtrar agendamentos"
-          className="filter-input"
-          value={filtroAgendamento}
-          onChange={(e) => setFiltroAgendamento(e.target.value)}
-        />
-      </div>
-
-      <h2>Agendamentos</h2>
-      <ul className="agendamentos-list">
-        {agendamentosFiltrados.map((agendamento, index) => (
-          <li key={index} className="agendamento-item">
-            <p><strong>Cliente:</strong> {agendamento.cliente}</p>
-            <p><strong>Produto:</strong> {agendamento.produto}</p>
-            <p><strong>Vendedor:</strong> {agendamento.vendedor}</p>
-            <p><strong>Data de Entrega:</strong> {agendamento.dataEntrega}</p>
-            <p><strong>Quantidade:</strong> {agendamento.quantidade}</p>
-            <p><strong>Observações:</strong> {agendamento.observacoes}</p>
-            <button onClick={() => handleEdit(index)} className="btn btn-warning">Editar</button>
-            <button onClick={() => handleDelete(index)} className="btn btn-danger">Excluir</button>
+      <h2 className="text-center mt-4">Lista de Agendamentos</h2>
+      <ul className="list-group mt-3">
+        {agendamentos.map((agendamento, index) => (
+          <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>Cliente:</strong> {agendamento.cliente} | <strong>Produto:</strong> {agendamento.produto} | <strong>Vendedor:</strong> {agendamento.vendedor} | <strong>Quantidade:</strong> {agendamento.quantidade} | <strong>Data de Entrega:</strong> {agendamento.dataEntrega}
+            </div>
+            <div>
+              <button className="btn btn-warning btn-sm mx-1" onClick={() => handleEdit(index)}>Editar</button>
+              <button className="btn btn-danger btn-sm" onClick={() => handleDelete(index)}>Remover</button>
+            </div>
           </li>
         ))}
       </ul>
