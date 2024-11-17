@@ -47,7 +47,6 @@ const GerenciadorCategorias = () => {
         <nav>
           <ul className="navbar-list">
             <li><Link to="/produtos" className="navbar-link">Gerenciar Produtos</Link></li>
-            <li><Link to="/categorias" className="navbar-link">Gerenciar Categorias</Link></li>
             <li><Link to="/vendedores" className="navbar-link">Gerenciar Vendedores</Link></li>
             <li><Link to="/agendamentos" className="navbar-link">Agendamento de Entregas</Link></li>
             <li><Link to="/listas" className="navbar-link">Gerenciador da Lista</Link></li>

@@ -76,19 +76,19 @@ const GerenciadorVendedores = () => {
 
   return (
     <CSSTransition in={true} timeout={300} classNames="fade" key={location.key} unmountOnExit>
-      <div className="gerenciador-vendedores-container">
-        <header className="gerenciador-vendedores-header">
-          <nav className="navbar-custom">
-            <ul>
-              <li><Link to="/produtos">Gerenciar Produtos</Link></li>
-              <li><Link to="/categorias">Gerenciar Categorias</Link></li>
-              <li><Link to="/vendedores">Gerenciar Vendedores</Link></li>
-              <li><Link to="/agendamentos">Agendamento de Entregas</Link></li>
-              <button onClick={() => navigate('/')} className="gerenciador-vendedores-button">Voltar para Home</button>
-            </ul>
-          </nav>
-         
-        </header>
+      <div className="gerenciador-categorias-container">
+      {/* Navbar */}
+      <header className="navbar-gerenciador">
+        <nav>
+          <ul className="navbar-list">
+            <li><Link to="/produtos" className="navbar-link">Gerenciar Produtos</Link></li>
+            <li><Link to="/categorias" className="navbar-link">Gerenciar Categorias</Link></li>
+            <li><Link to="/agendamentos" className="navbar-link">Agendamento de Entregas</Link></li>
+            <li><Link to="/listas" className="navbar-link">Gerenciador da Lista</Link></li>
+          </ul>
+        </nav>
+        <button onClick={() => navigate('/')} className="botao-home">Voltar para Home</button>
+      </header>
 
         <h1 className="text-center">Gerenciador de Vendedores</h1>
 

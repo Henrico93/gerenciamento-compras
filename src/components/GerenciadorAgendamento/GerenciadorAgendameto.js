@@ -100,12 +100,12 @@ const GerenciadorAgendamentos = () => {
   };
 
   return (
-    <div className="gerenciador-categorias-container">
+<div className="gerenciador-categorias-container">
+      {/* Navbar */}
       <header className="navbar-gerenciador">
         <nav>
           <ul className="navbar-list">
             <li><Link to="/produtos" className="navbar-link">Gerenciar Produtos</Link></li>
-            <li><Link to="/categorias" className="navbar-link">Gerenciar Categorias</Link></li>
             <li><Link to="/vendedores" className="navbar-link">Gerenciar Vendedores</Link></li>
             <li><Link to="/agendamentos" className="navbar-link">Agendamento de Entregas</Link></li>
             <li><Link to="/listas" className="navbar-link">Gerenciador da Lista</Link></li>
@@ -113,7 +113,6 @@ const GerenciadorAgendamentos = () => {
         </nav>
         <button onClick={() => navigate('/')} className="botao-home">Voltar para Home</button>
       </header>
-
       <h1 className="text-center">Gerenciador de Agendamentos</h1>
 
       <form onSubmit={handleSubmit} className="gerenciador-agendamentos-form">
@@ -191,7 +190,7 @@ const GerenciadorAgendamentos = () => {
             placeholder="Observações"
           />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="gerenciador-vendedores-button">
           {indiceEdicao !== null ? 'Atualizar Agendamento' : 'Adicionar Agendamento'}
         </button>
       </form>

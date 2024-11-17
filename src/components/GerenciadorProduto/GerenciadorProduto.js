@@ -64,11 +64,11 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
   const produtosFiltrados = produtos.filter(produto => produto.nome.toLowerCase().includes(filtro.toLowerCase()));
 
   return (
-    <div className="gerenciador-produtos-container">
+    <div className="gerenciador-categorias-container">
+      {/* Navbar */}
       <header className="navbar-gerenciador">
         <nav>
           <ul className="navbar-list">
-            <li><Link to="/produtos" className="navbar-link">Gerenciar Produtos</Link></li>
             <li><Link to="/categorias" className="navbar-link">Gerenciar Categorias</Link></li>
             <li><Link to="/vendedores" className="navbar-link">Gerenciar Vendedores</Link></li>
             <li><Link to="/agendamentos" className="navbar-link">Agendamento de Entregas</Link></li>

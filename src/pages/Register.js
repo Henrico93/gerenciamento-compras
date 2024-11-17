@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import bcrypt from 'bcryptjs';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';  // Importando os ícones de olho
 
 const Register = ({ onRegisterSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(false);  // Estado para controlar a visibilidade da senha
+    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);  // Estado para a senha de confirmação
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    // Função para gerar o salt aleatório
+    const generateSalt = () => {
+        return bcrypt.genSaltSync(10);  // Gera o salt com um fator de complexidade
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!email || !password || !confirmPassword) {
@@ -22,8 +30,6 @@ const Register = ({ onRegisterSuccess }) => {
         }
 
         const users = JSON.parse(localStorage.getItem('users')) || [];
-        console.log('Usuários existentes:', users);
-
         const userExists = users.find(user => user.email === email);
 
         if (userExists) {
@@ -31,15 +37,31 @@ const Register = ({ onRegisterSuccess }) => {
             return;
         }
 
-        users.push({ email, password });
+        // Criptografa a senha com bcrypt
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Armazena o usuário com o hash da senha no localStorage
+        users.push({ email, password: hashedPassword });
         localStorage.setItem('users', JSON.stringify(users));
 
-        onRegisterSuccess();
+        if (onRegisterSuccess) {
+            onRegisterSuccess();
+        }
+
+        // Navega para a página de login após o registro
         navigate('/login');
     };
 
     const handleBackToLogin = () => {
         navigate('/login');
+    };
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(prevState => !prevState);
+    };
+
+    const toggleConfirmPasswordVisibility = () => {
+        setConfirmPasswordVisible(prevState => !prevState);
     };
 
     return (
@@ -60,25 +82,35 @@ const Register = ({ onRegisterSuccess }) => {
                     </div>
                     <div className="grupo-formulario-register mb-3">
                         <label htmlFor="password" className="rotulo-formulario-register">Senha:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            className="campo-formulario-register"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
+                        <div className="senha-container">
+                            <input
+                                type={passwordVisible ? 'text' : 'password'}
+                                id="password"
+                                className="campo-formulario-register"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <span className="eye-icon" onClick={togglePasswordVisibility}>
+                                {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                            </span>
+                        </div>
                     </div>
                     <div className="grupo-formulario-register mb-4">
                         <label htmlFor="confirmPassword" className="rotulo-formulario-register">Confirmar Senha:</label>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            className="campo-formulario-register"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                        />
+                        <div className="senha-container">
+                            <input
+                                type={confirmPasswordVisible ? 'text' : 'password'}
+                                id="confirmPassword"
+                                className="campo-formulario-register"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                            />
+                            <span className="eye-icon" onClick={toggleConfirmPasswordVisibility}>
+                                {confirmPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+                            </span>
+                        </div>
                     </div>
                     <button type="submit" className="botao-register">Registrar</button>
                 </form>

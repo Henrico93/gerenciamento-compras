@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import bcrypt from 'bcryptjs';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';  // Importando os ícones de olho
 
 const Login = ({ onLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(false);  // Estado para controlar a visibilidade da senha
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!email || !password) {
@@ -16,18 +18,29 @@ const Login = ({ onLoginSuccess }) => {
         }
 
         const users = JSON.parse(localStorage.getItem('users')) || [];
-        const user = users.find(user => user.email === email && user.password === password);
+        const user = users.find(user => user.email === email);
 
         if (user) {
-            onLoginSuccess();
-            navigate('/'); 
+            // Compara a senha informada com o hash armazenado usando bcrypt
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+
+            if (isPasswordValid) {
+                onLoginSuccess();
+                navigate('/');  // Navega para a página inicial
+            } else {
+                alert('Credenciais inválidas');
+            }
         } else {
-            alert('Credenciais inválidas');
+            alert('Usuário não encontrado');
         }
     };
 
     const handleRegisterClick = () => {
-        navigate('/register');  
+        navigate('/register');
+    };
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(prevState => !prevState);
     };
 
     return (
@@ -48,14 +61,19 @@ const Login = ({ onLoginSuccess }) => {
                     </div>
                     <div className="grupo-formulario mb-4">
                         <label htmlFor="password" className="rotulo-formulario">Senha:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            className="campo-formulario"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
+                        <div className="senha-container">
+                            <input
+                                type={passwordVisible ? 'text' : 'password'}
+                                id="password"
+                                className="campo-formulario"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <span className="eye-icon" onClick={togglePasswordVisibility}>
+                                {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                            </span>
+                        </div>
                     </div>
                     <button type="submit" className="botao-login">Entrar</button>
                 </form>
