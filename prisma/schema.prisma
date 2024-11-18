@@ -12,3 +12,50 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Produto {
+  id          Int          @id @default(autoincrement())
+  nome        String       @unique
+  categoriaId Int
+  preco       Float
+  estoque     Int          @default(0)
+  vendedor    Vendedor?    @relation(fields: [vendedorId], references: [id])
+  vendedorId  Int?
+  agendamentos Agendamento[]
+  categoria   Categoria    @relation(fields: [categoriaId], references: [id])
+  estoques    Estoque[]    // Adicionando o campo de relação com Estoque
+}
+
+model Categoria {
+  id        Int        @id @default(autoincrement())
+  nome      String     @unique
+  produtos  Produto[]
+}
+
+model Vendedor {
+  id          Int          @id @default(autoincrement())
+  nome        String
+  email       String       @unique
+  cpf         String       @unique
+  produtos    Produto[]
+  agendamentos Agendamento[]
+}
+
+model Agendamento {
+  id          Int       @id @default(autoincrement())
+  dataEntrega DateTime
+  cliente     String
+  observacoes String?
+  quantidade  Int
+  produto     Produto   @relation(fields: [produtoId], references: [id])
+  produtoId   Int
+  vendedor    Vendedor  @relation(fields: [vendedorId], references: [id])
+  vendedorId  Int
+}
+
+model Estoque {
+  id        Int       @id @default(autoincrement())
+  produto   Produto   @relation(fields: [produtoId], references: [id])
+  produtoId Int
+  quantidade Int      @default(0)
+}

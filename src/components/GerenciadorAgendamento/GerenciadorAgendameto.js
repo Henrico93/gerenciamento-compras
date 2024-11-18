@@ -22,6 +22,7 @@ const GerenciadorAgendamentos = () => {
 
   const [produtos, setProdutos] = useState([]);
   const [dataEntrega, setDataEntrega] = useState('');
+  const [horaEntrega, setHoraEntrega] = useState('');  // Adicionando estado para hora
   const [cliente, setCliente] = useState('');
   const [vendedorSelecionado, setVendedorSelecionado] = useState('');
   const [produtoSelecionado, setProdutoSelecionado] = useState('');
@@ -29,8 +30,8 @@ const GerenciadorAgendamentos = () => {
   const [indiceEdicao, setIndiceEdicao] = useState(null);
   const [quantidadeDesejada, setQuantidadeDesejada] = useState(0);
 
-  const [criterioFiltro, setCriterioFiltro] = useState(''); // Critério de filtragem selecionado
-  const [valorFiltro, setValorFiltro] = useState(''); // Valor para o filtro (cliente, produto, etc.)
+  const [criterioFiltro, setCriterioFiltro] = useState('');
+  const [valorFiltro, setValorFiltro] = useState('');
 
   useEffect(() => {
     localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
@@ -48,14 +49,21 @@ const GerenciadorAgendamentos = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!dataEntrega || cliente.trim() === '' || produtoSelecionado === '' || vendedorSelecionado === '' || quantidadeDesejada <= 0) return;
+    if (!dataEntrega || !horaEntrega || cliente.trim() === '' || produtoSelecionado === '' || vendedorSelecionado === '' || quantidadeDesejada <= 0) return;
 
     if (quantidadeDesejada > estoque[produtoSelecionado]) {
       alert('A quantidade desejada excede o estoque disponível!');
       return;
     }
 
-    const novoAgendamento = { dataEntrega, cliente, vendedor: vendedorSelecionado, produto: produtoSelecionado, observacoes, quantidade: quantidadeDesejada };
+    const novoAgendamento = { 
+      dataEntrega: `${dataEntrega} ${horaEntrega}`,  // Combinando data e hora
+      cliente, 
+      vendedor: vendedorSelecionado, 
+      produto: produtoSelecionado, 
+      observacoes, 
+      quantidade: quantidadeDesejada 
+    };
 
     if (indiceEdicao !== null) {
       const agendamentosAtualizados = agendamentos.map((agendamento, index) =>
@@ -72,6 +80,7 @@ const GerenciadorAgendamentos = () => {
     localStorage.setItem('estoque', JSON.stringify(novoEstoque));
 
     setDataEntrega('');
+    setHoraEntrega('');
     setCliente('');
     setVendedorSelecionado('');
     setProdutoSelecionado('');
@@ -81,7 +90,9 @@ const GerenciadorAgendamentos = () => {
 
   const handleEdit = (index) => {
     const agendamento = agendamentos[index];
-    setDataEntrega(agendamento.dataEntrega);
+    const [data, hora] = agendamento.dataEntrega.split(' ');  // Separando data e hora
+    setDataEntrega(data);
+    setHoraEntrega(hora);
     setCliente(agendamento.cliente);
     setVendedorSelecionado(agendamento.vendedor);
     setProdutoSelecionado(agendamento.produto);
@@ -111,7 +122,8 @@ const GerenciadorAgendamentos = () => {
         case 'produto':
           return agendamento.produto.toLowerCase().includes(valorFiltro.toLowerCase());
         case 'data':
-          return agendamento.dataEntrega === valorFiltro;
+          const dataHora = `${agendamento.dataEntrega}`; // Data e Hora juntos
+          return dataHora.includes(valorFiltro);  // Mudança para comparar data + hora
         case 'vendedor':
           return agendamento.vendedor.toLowerCase().includes(valorFiltro.toLowerCase());
         default:
@@ -144,6 +156,15 @@ const GerenciadorAgendamentos = () => {
             className="form-control"
             value={dataEntrega}
             onChange={(e) => setDataEntrega(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="time"  // Campo de hora
+            className="form-control"
+            value={horaEntrega}
+            onChange={(e) => setHoraEntrega(e.target.value)}
             required
           />
         </div>
@@ -208,7 +229,7 @@ const GerenciadorAgendamentos = () => {
             placeholder="Observações"
           />
         </div>
-        <button type="submit" className="btn btn-primary">{indiceEdicao !== null ? 'Editar' : 'Adicionar'} Agendamento</button>
+        <button type="submit" className="btn btn-primary">Salvar Agendamento</button>
       </form>
 
       {/* Filtros de Pesquisa */}
@@ -222,7 +243,7 @@ const GerenciadorAgendamentos = () => {
           <option value="">Selecione...</option>
           <option value="cliente">Cliente</option>
           <option value="produto">Produto</option>
-          <option value="data">Data</option>
+          <option value="data">Data e hora</option>
           <option value="vendedor">Vendedor</option>
         </select>
       </div>
@@ -242,23 +263,23 @@ const GerenciadorAgendamentos = () => {
       <table className="table table-striped">
         <thead>
           <tr>
+            <th>Data e Hora</th>
             <th>Cliente</th>
+            <th>Vendedor</th>
             <th>Produto</th>
             <th>Quantidade</th>
-            <th>Data de Entrega</th>
-            <th>Vendedor</th>
             <th>Observações</th>
-            <th>---------------------</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
           {filtrarAgendamentos().map((agendamento, index) => (
             <tr key={index}>
+              <td>{agendamento.dataEntrega}</td>
               <td>{agendamento.cliente}</td>
+              <td>{agendamento.vendedor}</td>
               <td>{agendamento.produto}</td>
               <td>{agendamento.quantidade}</td>
-              <td>{agendamento.dataEntrega}</td>
-              <td>{agendamento.vendedor}</td>
               <td>{agendamento.observacoes}</td>
               <td>
                 <button onClick={() => handleEdit(index)} className="btn-editar">Editar</button>
