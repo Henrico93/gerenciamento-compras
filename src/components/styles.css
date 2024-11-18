@@ -703,7 +703,7 @@ body {
 }
 
 .button-edit {
-  background-color: #ffc107;
+  background-color: #2A9D8F;
   color: white;
   padding: 8px 15px;
   border: none;
@@ -714,7 +714,7 @@ body {
 }
 
 .button-edit:hover {
-  background-color: #e0a800;
+  background-color: #52B8A2;
 }
 
 .button-delete {
@@ -957,4 +957,155 @@ body {
   max-width: 1200px; /* Definir a mesma largura máxima que a navbar */
   margin: 0 auto; /* Centralizar o formulário */
   padding: 20px; /* Espacamento interno para não ficar colado nas bordas */
+}
+
+
+
+
+
+
+
+
+
+/* Estilo da lista de produtos */
+.lista {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.lista {
+  display: grid;
+  grid-template-columns: 3fr 1fr; /* Coluna maior para informações, menor para botões */
+  align-items: center;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lista:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Informações do produto */
+.produto-info {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.produto-nome {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.produto-descricao {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.produto-categoria,
+.produto-vendedor {
+  font-size: 0.9em;
+  color: #888;
+}
+
+/* Botões de ação */
+.produto-acoes {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-editar {
+  background-color: #2A9D8F;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-editar:hover {
+  background-color: #52B8A2;
+}
+
+.btn-deletar {
+  background-color: #E63946;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-deletar:hover {
+  background-color: #F06773;
+}
+
+
+.filtros-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filtros-box button {
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filtros-box button:hover {
+  background-color: #e0e0e0;
+}
+
+.filtro-aplicado {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+.produtos-selecionados {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filtro-produtos {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.filtros {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.select-filtro {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }

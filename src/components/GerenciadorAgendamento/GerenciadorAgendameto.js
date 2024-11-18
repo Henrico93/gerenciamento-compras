@@ -29,7 +29,9 @@ const GerenciadorAgendamentos = () => {
   const [indiceEdicao, setIndiceEdicao] = useState(null);
   const [quantidadeDesejada, setQuantidadeDesejada] = useState(0);
 
-  // Atualiza o estado de agendamentos no localStorage
+  const [criterioFiltro, setCriterioFiltro] = useState(''); // Critério de filtragem selecionado
+  const [valorFiltro, setValorFiltro] = useState(''); // Valor para o filtro (cliente, produto, etc.)
+
   useEffect(() => {
     localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
   }, [agendamentos]);
@@ -99,8 +101,27 @@ const GerenciadorAgendamentos = () => {
     localStorage.setItem('estoque', JSON.stringify(estoqueAtualizado));
   };
 
+  const filtrarAgendamentos = () => {
+    return agendamentos.filter(agendamento => {
+      if (criterioFiltro === '') return true;
+
+      switch (criterioFiltro) {
+        case 'cliente':
+          return agendamento.cliente.toLowerCase().includes(valorFiltro.toLowerCase());
+        case 'produto':
+          return agendamento.produto.toLowerCase().includes(valorFiltro.toLowerCase());
+        case 'data':
+          return agendamento.dataEntrega === valorFiltro;
+        case 'vendedor':
+          return agendamento.vendedor.toLowerCase().includes(valorFiltro.toLowerCase());
+        default:
+          return true;
+      }
+    });
+  };
+
   return (
-<div className="gerenciador-categorias-container">
+    <div className="gerenciador-categorias-container">
       {/* Navbar */}
       <header className="navbar-gerenciador">
         <nav>
@@ -116,6 +137,7 @@ const GerenciadorAgendamentos = () => {
       <h1 className="text-center">Gerenciador de Agendamentos</h1>
 
       <form onSubmit={handleSubmit} className="gerenciador-agendamentos-form">
+        {/* Formulário de Agendamento */}
         <div className="form-group">
           <input
             type="date"
@@ -161,14 +183,11 @@ const GerenciadorAgendamentos = () => {
             ))}
           </select>
         </div>
-
-        {/* Quantidade de estoque disponível */}
         {produtoSelecionado && (
           <div className="form-group">
             <p>Quantidade em estoque: {estoque[produtoSelecionado] || 0}</p>
           </div>
         )}
-
         <div className="form-group">
           <input
             type="number"
@@ -181,7 +200,6 @@ const GerenciadorAgendamentos = () => {
             required
           />
         </div>
-        
         <div className="form-group">
           <textarea
             className="form-control"
@@ -190,25 +208,66 @@ const GerenciadorAgendamentos = () => {
             placeholder="Observações"
           />
         </div>
-        <button type="submit" className="gerenciador-vendedores-button">
-          {indiceEdicao !== null ? 'Atualizar Agendamento' : 'Adicionar Agendamento'}
-        </button>
+        <button type="submit" className="btn btn-primary">{indiceEdicao !== null ? 'Editar' : 'Adicionar'} Agendamento</button>
       </form>
 
-      <h2 className="text-center mt-4">Lista de Agendamentos</h2>
-      <ul className="list-group mt-3">
-        {agendamentos.map((agendamento, index) => (
-          <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-              <strong>Cliente:</strong> {agendamento.cliente} | <strong>Produto:</strong> {agendamento.produto} | <strong>Vendedor:</strong> {agendamento.vendedor} | <strong>Quantidade:</strong> {agendamento.quantidade} | <strong>Data de Entrega:</strong> {agendamento.dataEntrega}
-            </div>
-            <div>
-              <button className="btn btn-warning btn-sm mx-1" onClick={() => handleEdit(index)}>Editar</button>
-              <button className="btn btn-danger btn-sm" onClick={() => handleDelete(index)}>Remover</button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {/* Filtros de Pesquisa */}
+      <div className="form-group">
+        <label>Selecione um critério de filtragem:</label>
+        <select
+          className="form-control"
+          value={criterioFiltro}
+          onChange={(e) => setCriterioFiltro(e.target.value)}
+        >
+          <option value="">Selecione...</option>
+          <option value="cliente">Cliente</option>
+          <option value="produto">Produto</option>
+          <option value="data">Data</option>
+          <option value="vendedor">Vendedor</option>
+        </select>
+      </div>
+      {criterioFiltro && (
+        <div className="form-group">
+          <input
+            type="text"
+            className="form-control"
+            value={valorFiltro}
+            onChange={(e) => setValorFiltro(e.target.value)}
+            placeholder={`Digite o ${criterioFiltro}`}
+          />
+        </div>
+      )}
+
+      {/* Tabela de Agendamentos */}
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Data de Entrega</th>
+            <th>Vendedor</th>
+            <th>Observações</th>
+            <th>---------------------</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filtrarAgendamentos().map((agendamento, index) => (
+            <tr key={index}>
+              <td>{agendamento.cliente}</td>
+              <td>{agendamento.produto}</td>
+              <td>{agendamento.quantidade}</td>
+              <td>{agendamento.dataEntrega}</td>
+              <td>{agendamento.vendedor}</td>
+              <td>{agendamento.observacoes}</td>
+              <td>
+                <button onClick={() => handleEdit(index)} className="btn-editar">Editar</button>
+                <button onClick={() => handleDelete(index)} className="btn-deletar">Excluir</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

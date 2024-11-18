@@ -24,12 +24,27 @@ const GerenciadorListas = () => {
   const [quantidadeAlterada, setQuantidadeAlterada] = useState(0);
   const [quantidadeRemover, setQuantidadeRemover] = useState(0);
 
+  // Função para atualizar o estoque no localStorage e garantir que os produtos não existentes sejam removidos
+  const atualizarEstoqueLocalStorage = (novoEstoque) => {
+    // Filtra os produtos existentes na lista de estoque e mantém apenas aqueles que ainda estão no array de produtos
+    const estoqueFiltrado = Object.keys(novoEstoque)
+      .filter(produto => produtos.some(p => p.nome === produto))
+      .reduce((acc, produto) => {
+        acc[produto] = novoEstoque[produto];
+        return acc;
+      }, {});
+
+    // Atualiza o estoque no estado e no localStorage
+    setEstoque(estoqueFiltrado);
+    localStorage.setItem('estoque', JSON.stringify(estoqueFiltrado));
+  };
+
   useEffect(() => {
     const estoqueInicial = produtos.reduce((acc, produto) => {
       acc[produto.nome] = estoque[produto.nome] || 0;
       return acc;
     }, {});
-    setEstoque(estoqueInicial);
+    atualizarEstoqueLocalStorage(estoqueInicial);
   }, [produtos, estoque]);
 
   const handleEstoqueChange = (produto, tipo) => {
@@ -54,8 +69,7 @@ const GerenciadorListas = () => {
     }
 
     const novoEstoqueState = { ...estoque, [produto]: novoEstoque };
-    setEstoque(novoEstoqueState);
-    localStorage.setItem('estoque', JSON.stringify(novoEstoqueState));
+    atualizarEstoqueLocalStorage(novoEstoqueState);
 
     setQuantidadeAlterada(0);
     setQuantidadeRemover(0);

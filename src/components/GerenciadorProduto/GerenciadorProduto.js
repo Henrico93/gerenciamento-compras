@@ -6,6 +6,7 @@ import '../styles.css';
 
 const GerenciadorProdutos = ({ vendedorSelecionado }) => {
   const navigate = useNavigate();
+
   const [produtos, setProdutos] = useState(() => {
     const produtosSalvos = localStorage.getItem('produtos');
     return produtosSalvos ? JSON.parse(produtosSalvos) : [];
@@ -20,15 +21,13 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
   const [descricaoProduto, setDescricaoProduto] = useState('');
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
   const [indiceEdicao, setIndiceEdicao] = useState(null);
-  const [filtro, setFiltro] = useState('');  // Novo estado para o filtro
+  const [filtro, setFiltro] = useState('');
+  const [campoFiltro, setCampoFiltro] = useState('Selecione');
+  const [ordem, setOrdem] = useState({ coluna: 'nome', crescente: true });
 
   useEffect(() => {
     localStorage.setItem('produtos', JSON.stringify(produtos));
   }, [produtos]);
-
-  useEffect(() => {
-    localStorage.setItem('categorias', JSON.stringify(categorias));
-  }, [categorias]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,12 +35,17 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
 
     if (indiceEdicao !== null) {
       const produtosAtualizados = produtos.map((produto, index) =>
-        index === indiceEdicao ? { nome: nomeProduto, categoria: categoriaSelecionada, descricao: descricaoProduto, vendedor: vendedorSelecionado } : produto
+        index === indiceEdicao
+          ? { nome: nomeProduto, categoria: categoriaSelecionada, descricao: descricaoProduto, vendedor: vendedorSelecionado }
+          : produto
       );
       setProdutos(produtosAtualizados);
       setIndiceEdicao(null);
     } else {
-      setProdutos([...produtos, { nome: nomeProduto, categoria: categoriaSelecionada, descricao: descricaoProduto, vendedor: vendedorSelecionado }]);
+      setProdutos([
+        ...produtos,
+        { nome: nomeProduto, categoria: categoriaSelecionada, descricao: descricaoProduto, vendedor: vendedorSelecionado },
+      ]);
     }
     setNomeProduto('');
     setDescricaoProduto('');
@@ -60,8 +64,31 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
     setProdutos(produtosAtualizados);
   };
 
-  // Função para filtrar produtos
-  const produtosFiltrados = produtos.filter(produto => produto.nome.toLowerCase().includes(filtro.toLowerCase()));
+  // Ordenação dos produtos
+  const ordenarProdutos = (coluna) => {
+    const novaOrdem = ordem.coluna === coluna ? !ordem.crescente : true;
+    setOrdem({ coluna, crescente: novaOrdem });
+
+    const produtosOrdenados = [...produtos].sort((a, b) => {
+      if (a[coluna] < b[coluna]) return novaOrdem ? -1 : 1;
+      if (a[coluna] > b[coluna]) return novaOrdem ? 1 : -1;
+      return 0;
+    });
+
+    setProdutos(produtosOrdenados);
+  };
+
+  // Filtragem dinâmica baseada no critério selecionado
+  const produtosFiltrados = produtos.filter((produto) => {
+    if (campoFiltro === 'nome') {
+      return produto.nome.toLowerCase().includes(filtro.toLowerCase());
+    } else if (campoFiltro === 'descricao') {
+      return produto.descricao.toLowerCase().includes(filtro.toLowerCase());
+    } else if (campoFiltro === 'categoria') {
+      return produto.categoria.toLowerCase().includes(filtro.toLowerCase());
+    }
+    return true;
+  });
 
   return (
     <div className="gerenciador-categorias-container">
@@ -80,6 +107,7 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
 
       <h1 className="text-center">Gerenciador de Produtos</h1>
 
+      {/* Formulário */}
       <form onSubmit={handleSubmit} className="gerenciador-produtos-form">
         <div className="form-group">
           <input
@@ -118,32 +146,58 @@ const GerenciadorProdutos = ({ vendedorSelecionado }) => {
         </button>
       </form>
 
-      <div className="filtro-container">
-        <input
-          type="text"
-          className="form-control filtro-input"
-          placeholder="Filtrar por nome do produto"
-          value={filtro}
-          onChange={(e) => setFiltro(e.target.value)}
-        />
+      {/* Seção de Filtro */}
+      <div className="form-group">
+        <label>Selecione um critério de filtragem:</label>
+        <select
+          className="form-control"
+          value={campoFiltro}
+          onChange={(e) => setCampoFiltro(e.target.value)}
+        >
+          <option value="Selecione">Selecione...</option>
+          <option value="nome">Nome do Produto</option>
+          
+          <option value="categoria">Categoria</option>
+        </select>
       </div>
 
-      <div className="list-group-produtos">
-        {produtosFiltrados.map((produto, index) => (
-          <div key={index} className="list-group-produtos-item">
-            <div>
-              <h5>{produto.nome}</h5>
-              <p>{produto.descricao}</p>
-              <p><strong>Categoria:</strong> {produto.categoria}</p>
-              <p><strong>Vendedor:</strong> {produto.vendedor}</p>
-            </div>
-            <div>
-              <button onClick={() => handleEdit(index)} className="btn btn-warning">Editar</button>
-              <button onClick={() => handleDelete(index)} className="btn btn-danger">Deletar</button>
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* Campo de filtro dinâmico */}
+      {campoFiltro !== 'Selecione' && (
+        <div className="form-group">
+          <input
+            type="text"
+            className="form-control"
+            value={filtro}
+            onChange={(e) => setFiltro(e.target.value)}
+            placeholder={`Digite o ${campoFiltro} para filtrar`}
+          />
+        </div>
+      )}
+
+      {/* Tabela de Produtos */}
+      <table className="table">
+        <thead>
+          <tr>
+            <th onClick={() => ordenarProdutos('nome')}>Nome</th>
+            <th onClick={() => ordenarProdutos('descricao')}>Descrição</th>
+            <th onClick={() => ordenarProdutos('categoria')}>Categoria</th>
+            <th>----------------------</th>
+          </tr> 
+        </thead>
+        <tbody>
+          {produtosFiltrados.map((produto, index) => (
+            <tr key={index}>
+              <td>{produto.nome}</td>
+              <td>{produto.descricao}</td>
+              <td>{produto.categoria}</td>
+              <td>
+                <button onClick={() => handleEdit(index)} className="btn-editar">Editar</button>
+                <button onClick={() => handleDelete(index)} className="btn-deletar">Deletar</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
